@@ -1,6 +1,6 @@
 const { createClient } = require("@supabase/supabase-js");
 
-const SUPABASE_URL = "https://wfctjfmigareigamzhbqy.supabase.co";
+const SUPABASE_URL="https://wfctjfmgareigamzhbqy.supabase.co";
 const SUPABASE_KEY = "ISI_ANON_KEY_LU";
 
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -77,53 +77,64 @@ app.post("/daftar", async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const { error } = await db
-      .from("users")
-      .insert([{ username, password }]);
-
-    if (error) {
-      return res.json({
-        sukses:false,
-        pesan:error.message
-      });
-    }
+    await axios.post(
+      `${SUPABASE_URL}/rest/v1/users`,
+      { username, password },
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal"
+        }
+      }
+    );
 
     res.json({
-      sukses:true,
-      pesan:"Akun berhasil dibuat 🔥"
+      sukses: true,
+      pesan: "Akun berhasil dibuat 🔥"
     });
 
   } catch (err) {
-
     res.json({
-      sukses:false,
-      pesan:"SERVER ERROR: "+err.message
+      sukses: false,
+      pesan: "SERVER ERROR: " + err.message
     });
-
   }
 });
 
 app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  const { data, error } = await db
-    .from("users")
-    .select("*")
-    .eq("username", username)
-    .eq("password", password);
+    const response = await axios.get(
+      `${SUPABASE_URL}/rest/v1/users?username=eq.${username}&password=eq.${password}`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
 
-  if (error) {
-    return res.json({ sukses: false, pesan: error.message });
+    if (response.data.length > 0) {
+      return res.json({
+        sukses: true,
+        pesan: "Login berhasil 🔥"
+      });
+    }
+
+    res.json({
+      sukses: false,
+      pesan: "Username/password salah"
+    });
+
+  } catch (err) {
+    res.json({
+      sukses: false,
+      pesan: "SERVER ERROR: " + err.message
+    });
   }
-
-  if (data.length > 0) {
-    return res.json({ sukses: true, pesan: "Login berhasil 🔥" });
-  }
-
-  res.json({ sukses: false, pesan: "Username/password salah" });
-});
-app.get("/",(req,res)=>{
-res.sendFile(path.join(__dirname,"index.html"));
 });
 
 app.listen(3000,()=>{
