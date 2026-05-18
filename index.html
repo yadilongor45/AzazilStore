@@ -234,7 +234,9 @@ if(error){
 document.getElementById(
 "daftarhasil"
 ).innerHTML=
-"❌ Gagal daftar";
+"❌ "+error.message;
+
+console.log(error);
 
 }else{
 
