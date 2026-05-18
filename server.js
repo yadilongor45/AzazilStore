@@ -74,17 +74,33 @@ status:"gagal"
 
 });
 app.post("/daftar", async (req, res) => {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  const { error } = await db
-    .from("users")
-    .insert([{ username, password }]);
+    const { error } = await db
+      .from("users")
+      .insert([{ username, password }]);
 
-  if (error) {
-    return res.json({ sukses: false, pesan: error.message });
+    if (error) {
+      return res.json({
+        sukses:false,
+        pesan:error.message
+      });
+    }
+
+    res.json({
+      sukses:true,
+      pesan:"Akun berhasil dibuat 🔥"
+    });
+
+  } catch (err) {
+
+    res.json({
+      sukses:false,
+      pesan:"SERVER ERROR: "+err.message
+    });
+
   }
-
-  res.json({ sukses: true, pesan: "Akun berhasil dibuat 🔥" });
 });
 
 app.post("/login", async (req, res) => {
