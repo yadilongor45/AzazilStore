@@ -147,13 +147,15 @@ const SUPABASE_URL="https://wfctjfmigareigamzhbqy.supabase.co";
 
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmY3RqZm1nYXJlaWdhbXpoYnF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMjQxNDAsImV4cCI6MjA5NDcwMDE0MH0.xRpoL5l2s72YyVAxeXM8oj3lP1opVVp1C6G6vKKPyao";
 
-const supabase = window.supabase.createClient(
+const { createClient } = supabase;
+
+const db = createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
+
 let sudahLogin = false;
 let idtrxTerakhir = "";
-async function beli(){
 
   let nomor = document.getElementById("nomor").value;
   let paket = document.getElementById("paket").value;
@@ -216,7 +218,7 @@ async function daftar(){
 let u=document.getElementById("user").value;
 let p=document.getElementById("pass").value;
 
-const {error}=await supabase
+const {error}=await db
 .from("users")
 .insert([
 {
@@ -244,7 +246,7 @@ async function login(){
 let u=document.getElementById("loginuser").value;
 let p=document.getElementById("loginpass").value;
 
-const {data,error}=await supabase
+const {data,error}=await db
 .from("users")
 .select("*")
 .eq("username",u)
