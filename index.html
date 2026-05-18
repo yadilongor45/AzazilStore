@@ -142,76 +142,76 @@ Beli Sekarang
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+
 const SUPABASE_URL="https://wfctjfmigareigamzhbqy.supabase.co";
 
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmY3RqZm1nYXJlaWdhbXpoYnF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMjQxNDAsImV4cCI6MjA5NDcwMDE0MH0.xRpoL5l2s72YyVAxeXM8oj3lP1opVVp1C6G6vKKPyao";
 
 const { createClient } = supabase;
 
-const db = createClient(
+const db=createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
 
-let sudahLogin = false;
-let idtrxTerakhir = "";
+let sudahLogin=false;
+let idtrxTerakhir="";
 
 async function beli(){
 
-  let nomor = document.getElementById("nomor").value;
-  let paket = document.getElementById("paket").value;
-  let hasil = document.getElementById("hasil");
+let nomor=document.getElementById("nomor").value;
+let paket=document.getElementById("paket").value;
+let hasil=document.getElementById("hasil");
 
-  if(!sudahLogin){
-    hasil.innerHTML = "❌ Login dulu sebelum order";
-    return;
-  }
+if(!sudahLogin){
+hasil.innerHTML="❌ Login dulu sebelum order";
+return;
+}
 
-  if(!nomor){
-    hasil.innerHTML = "❌ Nomor belum diisi";
-    return;
-  }
+if(!nomor){
+hasil.innerHTML="❌ Nomor belum diisi";
+return;
+}
 
-  hasil.innerHTML = "⏳ Memproses pesanan...";
+hasil.innerHTML="⏳ Memproses pesanan...";
 
-  const response = await fetch("/beli",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({nomor,paket})
-  });
+const response=await fetch("/beli",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+nomor,
+paket
+})
+});
 
-  const data=await response.json();
-  idtrxTerakhir=data.data.data.reffid;
+const data=await response.json();
 
-  if(data.data.ok){
-    hasil.innerHTML=
-    "✅ Pesanan berhasil dikirim 🔥"+
-    "<br>Nomor: "+data.data.data.tujuan+
-    "<br>Paket: "+paket+
-    "<br>ID TRX: "+idtrxTerakhir+
-    "<br><br><button onclick='cekStatus()'>Cek Status 🔍</button>";
-  }else{
-    hasil.innerHTML=
-    "❌ Transaksi gagal"+
-    "<br>"+data.data.msg+
-    "<br>ID TRX: "+idtrxTerakhir;
-  }
+idtrxTerakhir=data.data.data.reffid;
+
+hasil.innerHTML=
+"✅ Pesanan dikirim 🔥"+
+"<br>ID: "+idtrxTerakhir;
+
 }
 
 async function cekStatus(){
 
 let hasil=document.getElementById("hasil");
 
-const response=await fetch("/cek/"+idtrxTerakhir);
+const response=await fetch(
+"/cek/"+idtrxTerakhir
+);
 
 const data=await response.json();
 
 hasil.innerHTML +=
-"<br><br>📌 Hasil cek status:"+
-"<br><pre>"+JSON.stringify(data,null,2)+"</pre>";
+"<br><pre>"+
+JSON.stringify(data,null,2)+
+"</pre>";
 
 }
 
@@ -231,12 +231,16 @@ password:p
 
 if(error){
 
-document.getElementById("daftarhasil").innerHTML=
+document.getElementById(
+"daftarhasil"
+).innerHTML=
 "❌ Gagal daftar";
 
 }else{
 
-document.getElementById("daftarhasil").innerHTML=
+document.getElementById(
+"daftarhasil"
+).innerHTML=
 "✅ Akun berhasil dibuat 🔥";
 
 }
@@ -248,49 +252,32 @@ async function login(){
 let u=document.getElementById("loginuser").value;
 let p=document.getElementById("loginpass").value;
 
-const {data,error}=await db
+const {data}=await db
 .from("users")
 .select("*")
 .eq("username",u)
 .eq("password",p);
 
-if(data && data.length>0){
+if(data.length>0){
 
 sudahLogin=true;
 
-document.getElementById("loginhasil").innerHTML=
-"✅ Login berhasil, selamat datang "+u+" 🔥";
+document.getElementById(
+"loginhasil"
+).innerHTML=
+"✅ Login berhasil 🔥";
 
 }else{
 
-document.getElementById("loginhasil").innerHTML=
-"❌ Username / password salah";
+document.getElementById(
+"loginhasil"
+).innerHTML=
+"❌ Username/password salah";
 
 }
 
 }
 
-let u=document.getElementById("loginuser").value;
-let p=document.getElementById("loginpass").value;
-
-let cek=localStorage.getItem(u);
-
-if(cek==p){
-
-sudahLogin=true;
-
-document.getElementById("loginhasil").innerHTML=
-"✅ Login berhasil, selamat datang "+u+" 🔥";
-
-}else{
-
-document.getElementById("loginhasil").innerHTML=
-"❌ Username / password salah";
-
-}
-
-}
 </script>
-
 </body>
 </html>
