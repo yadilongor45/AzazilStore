@@ -1,3 +1,9 @@
+const { createClient } = require("@supabase/supabase-js");
+
+const SUPABASE_URL = "https://wfctjfmigareigamzhbqy.supabase.co";
+const SUPABASE_KEY = "ISI_ANON_KEY_LU";
+
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
 const express = require("express");
 const path = require("path");
 const axios = require("axios");
@@ -66,6 +72,39 @@ status:"gagal"
 
 }
 
+});
+app.post("/daftar", async (req, res) => {
+  const { username, password } = req.body;
+
+  const { error } = await db
+    .from("users")
+    .insert([{ username, password }]);
+
+  if (error) {
+    return res.json({ sukses: false, pesan: error.message });
+  }
+
+  res.json({ sukses: true, pesan: "Akun berhasil dibuat 🔥" });
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const { data, error } = await db
+    .from("users")
+    .select("*")
+    .eq("username", username)
+    .eq("password", password);
+
+  if (error) {
+    return res.json({ sukses: false, pesan: error.message });
+  }
+
+  if (data.length > 0) {
+    return res.json({ sukses: true, pesan: "Login berhasil 🔥" });
+  }
+
+  res.json({ sukses: false, pesan: "Username/password salah" });
 });
 app.get("/",(req,res)=>{
 res.sendFile(path.join(__dirname,"index.html"));

@@ -217,32 +217,22 @@ async function daftar(){
 let u=document.getElementById("user").value;
 let p=document.getElementById("pass").value;
 
-const {error}=await db
-.from("users")
-.insert([
-{
+const response=await fetch("/daftar",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
 username:u,
 password:p
-}
-]);
+})
+});
 
-if(error){
-
-document.getElementById(
-"daftarhasil"
-).innerHTML=
-"❌ "+error.message;
-
-console.log(error);
-
-}else{
+const data=await response.json();
 
 document.getElementById(
 "daftarhasil"
-).innerHTML=
-"✅ Akun berhasil dibuat 🔥";
-
-}
+).innerHTML=data.pesan;
 
 }
 
@@ -251,13 +241,20 @@ async function login(){
 let u=document.getElementById("loginuser").value;
 let p=document.getElementById("loginpass").value;
 
-const {data}=await db
-.from("users")
-.select("*")
-.eq("username",u)
-.eq("password",p);
+const response=await fetch("/login",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+username:u,
+password:p
+})
+});
 
-if(data.length>0){
+const data=await response.json();
+
+if(data.sukses){
 
 sudahLogin=true;
 
@@ -271,7 +268,7 @@ document.getElementById(
 document.getElementById(
 "loginhasil"
 ).innerHTML=
-"❌ Username/password salah";
+"❌ "+data.pesan;
 
 }
 
