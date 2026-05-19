@@ -137,22 +137,18 @@ style="width:100%;padding:12px;border:none;border-radius:8px;cursor:pointer;">
 Beli Sekarang
 </button>
 
+<button onclick="cekStatus()"
+style="width:100%;padding:12px;border:none;border-radius:8px;cursor:pointer;margin-top:10px;">
+Cek Status
+</button>
+
 <p id="hasil"></p>
 
 
 </div>
-<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
 <script>
 
-const SUPABASE_URL="https://wfctjfmgareigamzhbqy.supabase.co";
-
-const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndmY3RqZm1nYXJlaWdhbXpoYnF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxMjQxNDAsImV4cCI6MjA5NDcwMDE0MH0.xRpoL5l2s72YyVAxeXM8oj3lP1opVVp1C6G6vKKPyao";
-
-const db = window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
 let sudahLogin=false;
 let idtrxTerakhir="";
 
@@ -187,10 +183,66 @@ paket
 
 const data=await response.json();
 
-idtrxTerakhir=data.data.data.reffid;
+console.log("RESPON BACKEND:",data);
+
+idtrxTerakhir=data.data?.data?.reffid || "-";
+
+if(!data.sukses){
+hasil.innerHTML=
+"❌ "+data.pesan+
+"<br>ID: "+idtrxTerakhir;
+return;
+}
 
 hasil.innerHTML=
-"✅ Pesanan dikirim 🔥"+
+"✅ "+data.pesan+
+"<br>ID: "+idtrxTerakhir;
+
+}
+async function beli(){
+
+let nomor=document.getElementById("nomor").value;
+let paket=document.getElementById("paket").value;
+let hasil=document.getElementById("hasil");
+
+if(!sudahLogin){
+hasil.innerHTML="❌ Login dulu sebelum order";
+return;
+}
+
+if(!nomor){
+hasil.innerHTML="❌ Nomor belum diisi";
+return;
+}
+
+hasil.innerHTML="⏳ Memproses pesanan...";
+
+const response=await fetch("/beli",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+nomor,
+paket
+})
+});
+
+const data=await response.json();
+
+console.log("RESPON BACKEND:",data);
+
+idtrxTerakhir=data.data?.data?.reffid || "-";
+
+if(!data.sukses){
+hasil.innerHTML=
+"❌ "+data.pesan+
+"<br>ID: "+idtrxTerakhir;
+return;
+}
+
+hasil.innerHTML=
+"✅ "+data.pesan+
 "<br>ID: "+idtrxTerakhir;
 
 }
@@ -199,14 +251,21 @@ async function cekStatus(){
 
 let hasil=document.getElementById("hasil");
 
-const response=await fetch(
-"/cek/"+idtrxTerakhir
-);
+if(!idtrxTerakhir || idtrxTerakhir=="-"){
+hasil.innerHTML+="<br>❌ Belum ada ID transaksi";
+return;
+}
+
+hasil.innerHTML+="<br>⏳ Mengecek status...";
+
+const response=await fetch("/cek/"+idtrxTerakhir);
 
 const data=await response.json();
 
+console.log("STATUS:",data);
+
 hasil.innerHTML +=
-"<br><pre>"+
+"<br><br>📦 Status:<pre>"+
 JSON.stringify(data,null,2)+
 "</pre>";
 
