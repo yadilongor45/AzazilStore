@@ -351,6 +351,20 @@ async function daftar(){
 let u=document.getElementById("user").value;
 let p=document.getElementById("pass").value;
 
+if(!u || !p){
+
+document.getElementById(
+"daftarhasil"
+).innerHTML=
+"❌ Username & password wajib diisi";
+
+return;
+
+}
+
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
+
 const response=await fetch("/daftar",{
 method:"POST",
 headers:{
@@ -374,6 +388,17 @@ async function login(){
 
 let u=document.getElementById("loginuser").value;
 let p=document.getElementById("loginpass").value;
+
+if(!u || !p){
+
+document.getElementById(
+"loginhasil"
+).innerHTML=
+"❌ Isi username & password dulu";
+
+return;
+
+}
 
 const response=await fetch("/login",{
 method:"POST",
@@ -405,18 +430,12 @@ document.getElementById(
 "menuUser"
 ).style.display="block";
 
-document.getElementById(
-"loginhasil"
-).innerHTML=
-"✅ Login berhasil 🔥";
-
 }else{
 
 document.getElementById(
 "loginhasil"
 ).innerHTML=
 "❌ "+data.pesan;
-
 
 }
 
