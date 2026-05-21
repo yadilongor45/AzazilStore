@@ -166,8 +166,9 @@ AREA 4 : 123 GB
     </pre>
   </div>
 
-<div class="card">
+<div class="card" id="loginbox">
 <h2>Daftar Akun 👤</h2>
+
 <div class="card">
 <h2>Login 🔐</h2>
 
@@ -207,6 +208,17 @@ Daftar
 </button>
 
 <p id="daftarhasil"></p>
+</div>
+
+<div id="menuUser" style="display:none">
+  <div class="card">
+    <h2>👤 Menu User</h2>
+    <p>Login berhasil 🔥</p>
+
+    <button onclick="logout()">
+      Logout 🚪
+    </button>
+  </div>
 </div>
 
 <div class="card">
@@ -251,6 +263,21 @@ if(localStorage.getItem("login")){
 sudahLogin=true;
 }
 
+window.onload=function(){
+
+if(sudahLogin){
+
+document.getElementById(
+"loginbox"
+).style.display="none";
+
+document.getElementById(
+"menuUser"
+).style.display="block";
+
+}
+
+}
 async function beli(){
 
 let nomor=document.getElementById("nomor").value;
@@ -373,6 +400,14 @@ localStorage.setItem(
 "login",
 "true"
 );
+
+document.getElementById(
+"loginbox"
+).style.display="none";
+
+document.getElementById(
+"menuUser"
+).style.display="block";
 
 document.getElementById(
 "loginhasil"
