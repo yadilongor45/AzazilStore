@@ -186,10 +186,6 @@ style="width:100%;padding:12px;border:none;border-radius:8px;">
 Login
 </button>
 
-<button onclick="logout()">
-Logout 🚪
-</button>
-
 <p id="loginhasil"></p>
 </div>
 
@@ -311,7 +307,7 @@ const data=await response.json();
 
 console.log("RESPON BACKEND:",data);
 
-idtrxTerakhir=data.data?.data?.reffid || "-";
+idtrxTerakhir=data.data?.reffid || "-";
 
 if(!data.sukses){
 hasil.innerHTML=
