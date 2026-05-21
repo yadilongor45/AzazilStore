@@ -185,6 +185,10 @@ style="width:100%;padding:12px;border:none;border-radius:8px;">
 Login
 </button>
 
+<button onclick="logout()">
+Logout 🚪
+</button>
+
 <p id="loginhasil"></p>
 </div>
 
@@ -242,6 +246,10 @@ Cek Status
 
 let sudahLogin=false;
 let idtrxTerakhir="";
+
+if(localStorage.getItem("login")){
+sudahLogin=true;
+}
 
 async function beli(){
 
@@ -361,6 +369,11 @@ if(data.sukses){
 
 sudahLogin=true;
 
+localStorage.setItem(
+"login",
+"true"
+);
+
 document.getElementById(
 "loginhasil"
 ).innerHTML=
@@ -373,10 +386,20 @@ document.getElementById(
 ).innerHTML=
 "❌ "+data.pesan;
 
-}
 
 }
 
+}
+
+function logout(){
+
+localStorage.removeItem("login");
+
+sudahLogin=false;
+
+location.reload();
+
+}
 </script>
 </body>
 </html>
