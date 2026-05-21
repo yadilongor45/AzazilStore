@@ -348,15 +348,9 @@ JSON.stringify(data,null,2)+
 
 async function daftar(){
 
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
+if(!u.trim() || !p.trim()){
 
-if(!u || !p){
-
-document.getElementById(
-"daftarhasil"
-).innerHTML=
-"❌ Username & password wajib diisi";
+alert("❌ Username & password wajib diisi");
 
 return;
 
@@ -389,7 +383,13 @@ async function login(){
 let u=document.getElementById("loginuser").value;
 let p=document.getElementById("loginpass").value;
 
-if(!u || !p){
+if(!u.trim() || !p.trim()){
+
+alert("❌ Isi username & password dulu");
+
+return;
+
+}
 
 document.getElementById(
 "loginhasil"
