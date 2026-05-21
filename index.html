@@ -348,6 +348,9 @@ JSON.stringify(data,null,2)+
 
 async function daftar(){
 
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
+
 if(!u.trim() || !p.trim()){
 
 alert("❌ Username & password wajib diisi");
@@ -355,9 +358,6 @@ alert("❌ Username & password wajib diisi");
 return;
 
 }
-
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
 
 const response=await fetch("/daftar",{
 method:"POST",
@@ -386,15 +386,6 @@ let p=document.getElementById("loginpass").value;
 if(!u.trim() || !p.trim()){
 
 alert("❌ Isi username & password dulu");
-
-return;
-
-}
-
-document.getElementById(
-"loginhasil"
-).innerHTML=
-"❌ Isi username & password dulu";
 
 return;
 
