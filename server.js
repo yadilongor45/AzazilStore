@@ -47,18 +47,19 @@ teks.includes("error");
 res.json({
 sukses:!gagal,
 pesan:gagal
-? "Gagal: "+JSON.stringify(dataKhfy)
+? "Transaksi gagal, cek nomor atau coba lagi"
 : "Pesanan dikirim 🔥",
-data:dataKhfy
-});
 
+data:{
+reffid:dataKhfy.data?.reffid || "-"
+}
+
+});
 }catch(err){
 
 res.json({
 sukses:false,
-pesan:"SERVER ERROR: "+err.message,
-status:err.response?.status,
-detail:err.response?.data
+pesan:"SERVER ERROR"
 });
 
 }
