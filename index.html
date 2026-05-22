@@ -209,7 +209,21 @@ Daftar
 <div id="menuUser" style="display:none">
   <div class="card">
     <h2>👤 Menu User</h2>
-    <p>Login berhasil 🔥</p>
+
+    <p id="namaUser">
+      Username: -
+    </p>
+
+    <p id="saldoUser">
+      Saldo: Rp0
+    </p>
+
+    <button onclick="logout()">
+      Logout 🚪
+    </button>
+
+  </div>
+</div>
 
     <button onclick="logout()">
       Logout 🚪
@@ -271,6 +285,21 @@ document.getElementById(
 "menuUser"
 ).style.display="block";
 
+document.getElementById(
+"namaUser"
+).innerHTML=
+"👤 "+
+localStorage.getItem(
+"username"
+);
+
+document.getElementById(
+"saldoUser"
+).innerHTML=
+"💰 Saldo: Rp"+
+Number(
+localStorage.getItem("saldo")
+).toLocaleString("id-ID");
 }
 
 }
@@ -412,6 +441,28 @@ localStorage.setItem(
 "login",
 "true"
 );
+
+localStorage.setItem(
+"username",
+data.username
+);
+
+localStorage.setItem(
+"saldo",
+data.saldo
+);
+
+document.getElementById(
+"namaUser"
+).innerHTML=
+"👤 "+data.username;
+
+document.getElementById(
+"saldoUser"
+).innerHTML=
+"💰 Saldo: Rp"+
+Number(data.saldo)
+.toLocaleString("id-ID");
 
 document.getElementById(
 "loginbox"
