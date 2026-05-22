@@ -136,9 +136,16 @@ app.post("/login", async (req, res) => {
       }
     );
 
-    if (response.data.length > 0) {
-      return res.json({ sukses: true, pesan: "Login berhasil 🔥" });
-    }
+if (response.data.length > 0) {
+  const user = response.data[0];
+
+  return res.json({
+    sukses: true,
+    pesan: "Login berhasil 🔥",
+    username: user.username,
+    saldo: user.saldo || 0
+  });
+}
 
     res.json({ sukses: false, pesan: "Username/password salah" });
   } catch (err) {
