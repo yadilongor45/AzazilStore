@@ -25,9 +25,47 @@ app.use(express.static(__dirname));
 app.post("/beli", async(req,res)=>{
 try{
 
-const {nomor,paket}=req.body;
+const {nomor,paket,username}=req.body;
 const kodeProduk=produkMap[paket];
+const hargaMap = {
+"SuperMini - Rp52.000":52000,
+"Mini - Rp64.000":64000,
+"Big - Rp69.000":69000,
+"Jumbo V2 - Rp79.000":79000,
+"MegaBig - Rp104.000":104000,
+"Jumbo - Rp107.000":107000
+};
 
+const harga=hargaMap[paket];
+const userResponse=await axios.get(
+`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:`Bearer ${SUPABASE_KEY}`
+}
+}
+);
+
+const user=userResponse.data[0];
+
+if(!user){
+
+return res.json({
+sukses:false,
+pesan:"User tidak ditemukan"
+});
+
+}
+
+if(user.saldo < harga){
+
+return res.json({
+sukses:false,
+pesan:"Saldo tidak cukup top up dulu tod"
+});
+
+}
 const response=await axios.get(
 `${BASE_URL}/trx?produk=${kodeProduk}&tujuan=${nomor}&api_key=${API_KEY}`
 );
@@ -44,7 +82,25 @@ teks.includes("stok kosong") ||
 teks.includes("gagal") ||
 teks.includes("error");
 
-res.json({
+if(!gagal){
+
+await axios.patch(
+`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+{
+saldo:user.saldo-harga
+},
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:`Bearer ${SUPABASE_KEY}`,
+"Content-Type":"application/json",
+Prefer:"return=minimal"
+}
+}
+);
+
+}
+return res.json({
 sukses:!gagal,
 pesan:gagal
 ? "Transaksi gagal, cek nomor atau coba lagi"
