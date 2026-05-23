@@ -175,7 +175,25 @@ detail:err.response?.data
 app.post("/daftar", async (req, res) => {
   try {
     const { username, password } = req.body;
+    
+const cekUser = await axios.get(
+`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:`Bearer ${SUPABASE_KEY}`
+}
+}
+);
 
+if(cekUser.data.length>0){
+
+return res.json({
+sukses:false,
+pesan:"❌ Username sudah dipakai"
+});
+
+}
     await axios.post(
       `${SUPABASE_URL}/rest/v1/users`,
       { username, password },
