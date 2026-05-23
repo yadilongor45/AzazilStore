@@ -694,10 +694,34 @@ return;
 
 }
 
-stokhasil.innerHTML=
-"<pre>"+
-JSON.stringify(data.data,null,2)+
-"</pre>";
+let html="";
+
+data.data.forEach(item=>{
+
+html+=`
+
+<div style="
+border:1px solid #444;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+">
+
+📦 ${item.nama}<br>
+
+🏷️ ${item.type}<br>
+
+${item.sisa_slot > 0
+? "🟢 Tersedia: "+item.sisa_slot
+: "🔴 Stok Habis"}
+
+</div>
+
+`;
+
+});
+
+stokhasil.innerHTML=html;
 
 }
 </script>
