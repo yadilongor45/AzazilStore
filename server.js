@@ -94,17 +94,39 @@ headers:{
 apikey:SUPABASE_KEY,
 Authorization:`Bearer ${SUPABASE_KEY}`,
 "Content-Type":"application/json",
-Prefer:"return=minimal"
+Prefer:"return=representation"
 }
 }
 );
 
 }
+
+await axios.post(
+`${SUPABASE_URL}/rest/v1/transaksi`,
+{
+username,
+nomor,
+paket,
+harga,
+status:gagal ? "gagal":"sukses",
+reffid:dataKhfy.data?.reffid || "-"
+},
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:`Bearer ${SUPABASE_KEY}`,
+"Content-Type":"application/json"
+}
+}
+);
+
 return res.json({
 sukses:!gagal,
-pesan:gagal
-? "Transaksi gagal, cek nomor atau coba lagi"
-: "Pesanan dikirim 🔥",
+pesan: teks.includes("stok kosong")
+? "📦 Stok paket sedang kosong 😭"
+: gagal
+? "❌ Transaksi gagal, cek nomor atau coba lagi"
+: "✅ Pesanan dikirim 🔥",
 
 data:{
 reffid:dataKhfy.data?.reffid || "-"
@@ -233,9 +255,11 @@ await axios.get(
 {
 headers:{
 apikey:SUPABASE_KEY,
-Authorization:
-`Bearer ${SUPABASE_KEY}`
+Authorization:`Bearer ${SUPABASE_KEY}`,
+"Content-Type":"application/json",
+Prefer:"return=representation"
 }
+
 }
 
 );
@@ -254,7 +278,7 @@ pesan:"User tidak ditemukan"
 
 }
 
-await axios.patch(
+const updateResponse = await axios.patch(
 
 `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
 
@@ -279,6 +303,8 @@ Authorization:
 }
 
 );
+
+console.log("UPDATE SALDO:", updateResponse.data);
 
 return res.json({
 

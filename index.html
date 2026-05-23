@@ -579,10 +579,8 @@ headers:{
 },
 
 body:JSON.stringify({
-
-username:user,
-nominal:nominal
-
+username:user.trim(),
+nominal:nominal.trim()
 })
 
 }
