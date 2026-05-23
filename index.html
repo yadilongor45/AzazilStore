@@ -218,6 +218,12 @@ Daftar
       Saldo: Rp0
     </p>
 
+    <h3>📜 Riwayat Transaksi</h3>
+
+<div id="riwayat">
+Belum ada transaksi
+</div>
+
     <button onclick="topup()"
 style="margin-bottom:15px;">
 💰 Top Up Saldo
@@ -280,6 +286,11 @@ style="width:100%;padding:12px;border:none;border-radius:8px;cursor:pointer;marg
 Cek Status
 </button>
 
+<button onclick="cekStok()" style="margin-top:10px;">
+📦 Cek Stok Kuota
+</button>
+
+<div id="stokhasil"></div>
 <p id="hasil"></p>
 
 
@@ -305,6 +316,7 @@ document.getElementById(
 document.getElementById(
 "menuUser"
 ).style.display="block";
+ambilRiwayat();
 
 if(
 localStorage.getItem("username")
@@ -515,6 +527,7 @@ document.getElementById(
 document.getElementById(
 "menuUser"
 ).style.display="block";
+ambilRiwayat();
 
 }else{
 
@@ -605,6 +618,88 @@ document.getElementById(
 
 }
 
+async function ambilRiwayat(){
+
+const username=
+localStorage.getItem(
+"username"
+);
+
+const response=
+await fetch(
+"/riwayat/"+username
+);
+
+const data=
+await response.json();
+
+let html="";
+
+if(data.length==0){
+
+html=
+"Belum ada transaksi 😭";
+
+}else{
+
+data.forEach(item=>{
+
+html+=`
+<div style="
+border:1px solid #444;
+padding:10px;
+margin-top:10px;
+border-radius:10px;
+">
+
+📦 ${item.paket}<br>
+
+📱 ${item.nomor}<br>
+
+💰 Rp${Number(item.harga)
+.toLocaleString("id-ID")}<br>
+
+${item.status=="sukses"
+?"✅"
+:"❌"}
+
+${item.status}
+
+</div>
+`;
+
+});
+
+}
+
+document.getElementById(
+"riwayat"
+).innerHTML=html;
+
+}
+
+async function cekStok(){
+
+let stokhasil=document.getElementById("stokhasil");
+
+stokhasil.innerHTML="⏳ Mengecek stok...";
+
+const response=await fetch("/cekstok");
+const data=await response.json();
+
+if(!data.sukses){
+
+stokhasil.innerHTML="❌ Gagal cek stok";
+return;
+
+}
+
+stokhasil.innerHTML=
+"<pre>"+
+JSON.stringify(data.data,null,2)+
+"</pre>";
+
+}
 </script>
 </body>
 </html>

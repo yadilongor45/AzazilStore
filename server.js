@@ -327,6 +327,69 @@ pesan:"Server error"
 
 });
 
+app.get("/riwayat/:username", async(req,res)=>{
+
+try{
+
+const username=
+req.params.username;
+
+const response=
+await axios.get(
+
+`${SUPABASE_URL}/rest/v1/transaksi?username=eq.${username}&order=id.desc`,
+
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:
+`Bearer ${SUPABASE_KEY}`
+}
+}
+
+);
+
+return res.json(
+response.data
+);
+
+}catch(err){
+
+return res.json([]);
+
+}
+
+});
+
+app.get("/cekstok", async(req,res)=>{
+
+try{
+
+const response=await axios.get(
+"https://panel.khfy-store.com/api_v3/cek_stock_akrab",
+{
+params:{
+api_key:API_KEY
+}
+}
+);
+
+return res.json({
+sukses:true,
+data:response.data
+});
+
+}catch(err){
+
+return res.json({
+sukses:false,
+pesan:"Gagal cek stok"
+});
+
+}
+
+});
+
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
