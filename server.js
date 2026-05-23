@@ -193,14 +193,16 @@ app.post("/login", async (req, res) => {
     );
 
 if (response.data.length > 0) {
-  const user = response.data[0];
 
-  return res.json({
-    sukses: true,
-    pesan: "Login berhasil 🔥",
-    username: user.username,
-    saldo: user.saldo || 0
-  });
+const user=response.data[0];
+
+return res.json({
+sukses:true,
+pesan:"Login berhasil 🔥",
+username:user.username,
+saldo:user.saldo
+});
+
 }
 
     res.json({ sukses: false, pesan: "Username/password salah" });
@@ -212,6 +214,91 @@ if (response.data.length > 0) {
       detail: err.response?.data
     });
   }
+});
+
+app.post("/tambahsaldo", async(req,res)=>{
+
+try{
+
+const {
+username,
+nominal
+}=req.body;
+
+const userResponse=
+await axios.get(
+
+`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:
+`Bearer ${SUPABASE_KEY}`
+}
+}
+
+);
+
+const user=
+userResponse.data[0];
+
+if(!user){
+
+return res.json({
+
+sukses:false,
+pesan:"User tidak ditemukan"
+
+});
+
+}
+
+await axios.patch(
+
+`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+
+{
+saldo:
+Number(
+user.saldo
+)+
+Number(
+nominal
+)
+},
+
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:
+`Bearer ${SUPABASE_KEY}`,
+"Content-Type":
+"application/json"
+}
+}
+
+);
+
+return res.json({
+
+sukses:true,
+pesan:
+"Saldo berhasil ditambah 😭🔥"
+
+});
+
+}catch(err){
+
+console.log("ERROR TAMBAH SALDO:", err.response?.data || err.message);
+
+return res.json({
+sukses:false,
+pesan:"Server error"
+});
+
+}
+
 });
 
 app.get("/", (req, res) => {

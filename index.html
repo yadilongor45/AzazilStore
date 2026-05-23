@@ -223,6 +223,26 @@ style="margin-bottom:15px;">
 💰 Top Up Saldo
 </button>
 
+<div id="adminPanel" style="display:none">
+
+<hr style="margin:20px 0">
+
+<h2>👑 Admin Panel</h2>
+
+<input
+id="userTopup"
+placeholder="Username">
+
+<input
+id="nominalTopup"
+placeholder="Nominal">
+
+<button onclick="tambahSaldo()">
+Tambah Saldo 💰
+</button>
+
+</div>
+
     <button onclick="logout()"
 style="margin-top:20px;">
 Logout 🚪
@@ -286,6 +306,17 @@ document.getElementById(
 "menuUser"
 ).style.display="block";
 
+if(
+localStorage.getItem("username")
+=="yaditaoh"
+){
+
+document.getElementById(
+"adminPanel"
+).style.display="block";
+
+}
+
 document.getElementById(
 "namaUser"
 ).innerHTML=
@@ -293,7 +324,10 @@ document.getElementById(
 localStorage.getItem(
 "username"
 );
-
+console.log(
+"SALDO LOCAL:",
+localStorage.getItem("saldo")
+);
 document.getElementById(
 "saldoUser"
 ).innerHTML=
@@ -434,7 +468,7 @@ password:p
 });
 
 const data=await response.json();
-
+console.log("DATA LOGIN:",data);
 if(data.sukses){
 
 sudahLogin=true;
@@ -465,6 +499,14 @@ document.getElementById(
 "💰 Saldo: Rp"+
 Number(data.saldo)
 .toLocaleString("id-ID");
+
+if(data.username=="yaditaoh"){
+
+document.getElementById(
+"adminPanel"
+).style.display="block";
+
+}
 
 document.getElementById(
 "loginbox"
@@ -500,6 +542,68 @@ function topup(){
 alert(
 "Fitur top up saldo segera hadir"
 );
+
+}
+
+async function tambahSaldo(){
+
+let user=
+document.getElementById(
+"userTopup"
+).value;
+
+let nominal=
+document.getElementById(
+"nominalTopup"
+).value;
+
+if(!user || !nominal){
+
+alert(
+"Isi username & nominal 😭"
+);
+
+return;
+
+}
+
+const response=
+await fetch(
+"/tambahsaldo",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+
+username:user,
+nominal:nominal
+
+})
+
+}
+);
+
+const data=
+await response.json();
+
+alert(data.pesan);
+
+if(data.sukses){
+
+document.getElementById(
+"userTopup"
+).value="";
+
+document.getElementById(
+"nominalTopup"
+).value="";
+
+}
 
 }
 
