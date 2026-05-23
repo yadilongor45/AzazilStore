@@ -28,12 +28,12 @@ try{
 const {nomor,paket,username}=req.body;
 const kodeProduk=produkMap[paket];
 const hargaMap = {
-"SuperMini - Rp52.000":52000,
-"Mini - Rp64.000":64000,
-"Big - Rp69.000":69000,
-"Jumbo V2 - Rp79.000":79000,
-"MegaBig - Rp104.000":104000,
-"Jumbo - Rp107.000":107000
+"SuperMini - Rp45.000":45000,
+"Mini - Rp58.000":58000,
+"Big - Rp62.000":62000,
+"Jumbo V2 - Rp72.000":72000,
+"MegaBig - Rp97.000":97000,
+"Jumbo - Rp99.000":99000
 };
 
 const harga=hargaMap[paket];
