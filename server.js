@@ -11,12 +11,12 @@ const API_KEY = process.env.API_KEY;
 const BASE_URL = "https://panel.khfy-store.com/api_v2";
 
 const produkMap = {
-  "SuperMini - Rp52.000": "XLA14",
-  "Mini - Rp64.000": "XLA32",
-  "Big - Rp69.000": "XLA39",
-  "Jumbo V2 - Rp79.000": "XLA51",
-  "MegaBig - Rp104.000": "XLA89",
-  "Jumbo - Rp107.000": "XLA65"
+  "SuperMini - Rp45.000": "XLA14",
+  "Mini - Rp58.000": "XLA32",
+  "Big - Rp62.000": "XLA39",
+  "Jumbo V2 - Rp72.000": "XLA51",
+  "MegaBig - Rp97.000": "XLA89",
+  "Jumbo - Rp99.000": "XLA65"
 };
 
 app.use(express.json());
@@ -26,14 +26,27 @@ app.post("/beli", async(req,res)=>{
 try{
 
 const {nomor,paket,username}=req.body;
+
 const kodeProduk=produkMap[paket];
-const hargaMap = {
+
+if(!kodeProduk){
+
+return res.json({
+sukses:false,
+pesan:"❌ Paket tidak valid"
+});
+
+}
+
+const hargaMap={
+
 "SuperMini - Rp45.000":45000,
 "Mini - Rp58.000":58000,
 "Big - Rp62.000":62000,
 "Jumbo V2 - Rp72.000":72000,
 "MegaBig - Rp97.000":97000,
 "Jumbo - Rp99.000":99000
+
 };
 
 const harga=hargaMap[paket];
@@ -175,7 +188,7 @@ detail:err.response?.data
 app.post("/daftar", async (req, res) => {
   try {
     const { username, password } = req.body;
-    
+
 const cekUser = await axios.get(
 `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
 {
