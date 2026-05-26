@@ -355,12 +355,17 @@ const data=await response.json();
 
 console.log("RESPON BACKEND:",data);
 
-idtrxTerakhir=data.data?.reffid || "-";
+idtrxTerakhir =
+data.data?.reffid ||
+data.data?.data?.reffid ||
+data.reffid ||
+data.refid ||
+"-";
 
 if(!data.sukses){
 hasil.innerHTML=
 "❌ "+data.pesan+
-"<br>ID: "+idtrxTerakhir;
+(idtrxTerakhir!="-" ? "<br>ID: "+idtrxTerakhir : "");
 return;
 }
 

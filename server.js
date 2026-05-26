@@ -89,13 +89,25 @@ console.log("RESPON KHFY:",dataKhfy);
 
 const teks=JSON.stringify(dataKhfy).toLowerCase();
 
-const gagal=
+const reffid =
+dataKhfy.data?.reffid ||
+dataKhfy.reffid ||
+dataKhfy.refid ||
+"-";
+
+const gagal =
+dataKhfy.ok === false ||
 teks.includes("saldo tidak mencukupi") ||
 teks.includes("stok kosong") ||
+teks.includes("produk salah") ||
 teks.includes("gagal") ||
 teks.includes("error");
 
-if(!gagal){
+const sukses =
+dataKhfy.ok === true &&
+!gagal;
+
+if(sukses){
 
 await axios.patch(
 `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
@@ -107,7 +119,7 @@ headers:{
 apikey:SUPABASE_KEY,
 Authorization:`Bearer ${SUPABASE_KEY}`,
 "Content-Type":"application/json",
-Prefer:"return=representation"
+Prefer:"return=minimal"
 }
 }
 );
@@ -121,8 +133,8 @@ username,
 nomor,
 paket,
 harga,
-status:gagal ? "gagal":"sukses",
-reffid:dataKhfy.data?.reffid || "-"
+status:sukses ? "sukses":"gagal",
+reffid
 },
 {
 headers:{
@@ -134,7 +146,7 @@ Authorization:`Bearer ${SUPABASE_KEY}`,
 );
 
 return res.json({
-sukses:!gagal,
+sukses,
 pesan: teks.includes("stok kosong")
 ? "📦 Stok paket sedang kosong 😭"
 : gagal
@@ -142,10 +154,11 @@ pesan: teks.includes("stok kosong")
 : "✅ Pesanan dikirim 🔥",
 
 data:{
-reffid:dataKhfy.data?.reffid || "-"
+reffid
 }
 
 });
+
 }catch(err){
 
 res.json({
