@@ -1,4 +1,5 @@
 require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const axios = require("axios");
@@ -164,29 +165,34 @@ return res.json({
 }
 });
 
-app.get("/cek/:refid", async (req, res) => {
-  try {
-    const refid = req.params.refid;
-    console.log("REFID DICEK:", refid);
+app.get("/cek/:reffid", async(req,res)=>{
 
-    const response = await axios.get(
-      `${BASE_URL}/history?api_key=${API_KEY}&refid=${refid}`
-    );
+try{
 
-    console.log("STATUS:", response.data);
+const refid=req.params.reffid;
 
-    return res.json(response.data);
-  } catch (err) {
-    console.log("ERROR CEK STATUS:", err.response?.data);
-    console.log("STATUS CODE:", err.response?.status);
+const cek=await axios.get(
+`https://panel.khfy-store.com/api_v2/history?api_key=${API_KEY}&refid=${refid}`
+);
 
-    return res.json({
-      sukses: false,
-      pesan: "Gagal cek status",
-      status: err.response?.status,
-      detail: err.response?.data
-    });
-  }
+console.log("REFID DICEK:",refid);
+console.log("STATUS:",cek.data);
+
+res.json(cek.data);
+
+}catch(err){
+
+console.log(
+"ERROR CEK:",
+err.response?.data || err.message
+);
+
+res.json({
+ok:false
+});
+
+}
+
 });
 
 app.post("/daftar", async (req, res) => {

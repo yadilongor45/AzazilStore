@@ -1,743 +1,676 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Azazil Store</title>
 
 <style>
-#riwayat{
-display:none;
+:root{
+  --bg:#08080c;
+  --card:#12121a;
+  --card2:#181824;
+  --text:#f5f7fb;
+  --muted:#a7adbb;
+  --line:#2a2d3a;
+  --primary:#ff7a18;
+  --primary2:#ff3d81;
+  --good:#22c55e;
+  --bad:#ef4444;
+  --warn:#facc15;
 }
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
 }
 
 body{
-padding:20px;
-background:#111;
-color:white;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255,122,24,.22), transparent 30%),
+    radial-gradient(circle at top right, rgba(255,61,129,.18), transparent 28%),
+    var(--bg);
+  color:var(--text);
+  padding:18px;
 }
 
-input,
-select,
+.container{
+  max-width:1100px;
+  margin:auto;
+}
+
+.hero{
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:linear-gradient(135deg, rgba(255,122,24,.16), rgba(255,61,129,.10));
+  box-shadow:0 15px 40px rgba(0,0,0,.35);
+  margin-bottom:18px;
+}
+
+.hero h1{
+  font-size:36px;
+  margin-bottom:6px;
+}
+
+.hero p{
+  color:var(--muted);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.card{
+  background:rgba(18,18,26,.92);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 10px 28px rgba(0,0,0,.28);
+}
+
+.card h2{
+  margin-bottom:10px;
+  font-size:22px;
+}
+
+.card pre{
+  white-space:pre-wrap;
+  color:#dbe0ea;
+  line-height:1.45;
+  background:var(--card2);
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+input, select, button{
+  width:100%;
+  padding:13px 14px;
+  margin-top:10px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  outline:none;
+  font-size:15px;
+}
+
+input, select{
+  background:#0c0c12;
+  color:var(--text);
+}
+
+input:focus, select:focus{
+  border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(255,122,24,.15);
+}
+
 button{
-
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-
+  border:none;
+  cursor:pointer;
+  font-weight:700;
+  color:white;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  transition:.18s;
 }
 
-button{
-cursor:pointer;
+button:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.08);
 }
 
-@media(max-width:700px){
-
-body{
-padding:12px;
+.btn-secondary{
+  background:#242433;
 }
 
-input,
-select,
-button{
-width:100%;
-font-size:16px;
-padding:14px;
+.btn-danger{
+  background:linear-gradient(135deg,#ef4444,#fb7185);
 }
 
-h1{
-font-size:28px;
+.info-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
 }
 
-h2{
-font-size:22px;
+.badge{
+  display:inline-block;
+  padding:7px 10px;
+  border-radius:999px;
+  background:#20202d;
+  color:#e8eaf2;
+  border:1px solid var(--line);
+  font-size:14px;
 }
 
-#riwayat div,
-#stokhasil div{
-
-font-size:15px;
-
+#riwayat{
+  display:none;
 }
 
+.section-title{
+  cursor:pointer;
+  user-select:none;
+  padding:10px 0;
 }
 
+#hasil, #stokhasil, #loginhasil, #daftarhasil{
+  margin-top:12px;
+  line-height:1.55;
+}
+
+.item-card{
+  border:1px solid var(--line);
+  background:#0d0d14;
+  padding:12px;
+  margin-top:10px;
+  border-radius:14px;
+  line-height:1.55;
+}
+
+.footer-space{
+  height:40px;
+}
+
+@media(max-width:850px){
+  .grid, .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:30px;
+  }
+}
+
+@media(max-width:520px){
+  body{
+    padding:12px;
+  }
+
+  .hero{
+    padding:18px;
+  }
+
+  .card{
+    padding:14px;
+    border-radius:16px;
+  }
+
+  input, select, button{
+    font-size:16px;
+    padding:14px;
+  }
+}
 </style>
 </head>
-<body>
-  <h1>Azazil Store 🔥</h1>
-  <p>Daftar Kuota XL / AXIS</p>
 
-<div class="card">
-  <h2>SuperMini</h2>
-  <pre>
-AREA 1 : 13 - 15 GB
+<body>
+<div class="container">
+
+  <div class="hero">
+    <h1>Azazil Store 🔥</h1>
+    <p>Top up kuota XL / AXIS cepat, simpel, dan gak ribet.</p>
+    <div class="info-row">
+      <span class="badge">⚡ Proses otomatis</span>
+      <span class="badge">📦 Paket Akrab</span>
+      <span class="badge">💰 Saldo user</span>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <h2>📦 SuperMini</h2>
+      <pre>AREA 1 : 13 - 15 GB
 AREA 2 : 15 - 17 GB
 AREA 3 : 20 - 22 GB
-AREA 4 : 30 - 32 GB
-  </pre>
-</div>
+AREA 4 : 30 - 32 GB</pre>
+    </div>
+
     <div class="card">
-  <h2>Mini</h2>
-  <pre>
-AREA 1 : 31.75 - 33.75 GB
+      <h2>📦 Mini</h2>
+      <pre>AREA 1 : 31.75 - 33.75 GB
 AREA 2 : 33.75 - 35.75 GB
 AREA 3 : 38.75 - 40.75 GB
-AREA 4 : 48.75 - 50.75 GB
-  
-    </pre>
-  </div>
+AREA 4 : 48.75 - 50.75 GB</pre>
+    </div>
 
-  <div class="card">
-    <h2>Big</h2>
-    <pre>
-AREA 1 : 38 - 40 GB
+    <div class="card">
+      <h2>📦 Big</h2>
+      <pre>AREA 1 : 38 - 40 GB
 AREA 2 : 40 - 42 GB
 AREA 3 : 45 - 47 GB
-AREA 4 : 55 - 57 GB
-    </pre>
-  </div>
+AREA 4 : 55 - 57 GB</pre>
+    </div>
 
-  <div class="card">
-    <h2>Jumbo V2</h2>
-    <pre>
-AREA 1 : 50.5 - 52.5 GB
+    <div class="card">
+      <h2>📦 Jumbo V2</h2>
+      <pre>AREA 1 : 50.5 - 52.5 GB
 AREA 2 : 52.5 - 54.5 GB
 AREA 3 : 57.5 - 59.5 GB
-AREA 4 : 67.5 - 69.5 GB
-    </pre>
-  </div>
+AREA 4 : 67.5 - 69.5 GB</pre>
+    </div>
 
-  <div class="card">
-    <h2>MegaBig</h2>
-    <pre>
-AREA 1 : 88 - 90 GB
+    <div class="card">
+      <h2>📦 MegaBig</h2>
+      <pre>AREA 1 : 88 - 90 GB
 AREA 2 : 90 - 92 GB
 AREA 3 : 95 - 97 GB
-AREA 4 : 105 - 107 GB
-    </pre>
-  </div>
+AREA 4 : 105 - 107 GB</pre>
+    </div>
 
-  <div class="card">
-    <h2>Jumbo</h2>
-    <pre>
-AREA 1 : 65 GB
+    <div class="card">
+      <h2>📦 Jumbo</h2>
+      <pre>AREA 1 : 65 GB
 AREA 2 : 70 GB
 AREA 3 : 83 GB
-AREA 4 : 123 GB
-    </pre>
+AREA 4 : 123 GB</pre>
+    </div>
   </div>
 
-<div class="card" id="loginbox">
-<h2>Daftar Akun 👤</h2>
+  <div class="form-grid" id="loginbox">
+    <div class="card">
+      <h2>Login 🔐</h2>
+      <input id="loginuser" placeholder="Username">
+      <input id="loginpass" type="password" placeholder="Password">
+      <button onclick="login()">Login</button>
+      <p id="loginhasil"></p>
+    </div>
 
-<div class="card">
-<h2>Login 🔐</h2>
+    <div class="card">
+      <h2>Daftar Akun 👤</h2>
+      <input id="user" placeholder="Username">
+      <input id="pass" type="password" placeholder="Password">
+      <button onclick="daftar()">Daftar</button>
+      <p id="daftarhasil"></p>
+    </div>
+  </div>
 
-<input id="loginuser"
-placeholder="Username"
-style="width:95%;padding:10px;margin-bottom:10px;border-radius:8px;">
+  <div id="menuUser" style="display:none">
+    <div class="card">
+      <h2>👤 Menu User</h2>
 
-<input id="loginpass"
-type="password"
-placeholder="Password"
-style="width:95%;padding:10px;margin-bottom:10px;border-radius:8px;">
+      <div class="info-row">
+        <span class="badge" id="namaUser">👤 -</span>
+        <span class="badge" id="saldoUser">💰 Saldo: Rp0</span>
+      </div>
 
-<button onclick="login()"
-style="width:100%;padding:12px;border:none;border-radius:8px;">
-Login
-</button>
+      <h3 class="section-title" onclick="toggleRiwayat()">
+        📜 Riwayat Transaksi <span id="panah">▶</span>
+      </h3>
 
-<p id="loginhasil"></p>
-</div>
+      <div id="riwayat"></div>
 
-<input id="user"
-placeholder="Username"
-style="width:95%;padding:10px;margin-bottom:10px;border-radius:8px;">
+      <button onclick="topup()">💰 Top Up Saldo</button>
 
-<input id="pass"
-type="password"
-placeholder="Password"
-style="width:95%;padding:10px;margin-bottom:10px;border-radius:8px;">
+      <div id="adminPanel" style="display:none">
+        <hr style="margin:20px 0;border-color:var(--line)">
+        <h2>👑 Admin Panel</h2>
+        <input id="userTopup" placeholder="Username">
+        <input id="nominalTopup" placeholder="Nominal">
+        <button onclick="tambahSaldo()">Tambah Saldo 💰</button>
+      </div>
 
-<button onclick="daftar()"
-style="width:100%;padding:12px;border:none;border-radius:8px;">
-Daftar
-</button>
+      <button class="btn-danger" onclick="logout()">Logout 🚪</button>
+    </div>
+  </div>
 
-<p id="daftarhasil"></p>
-</div>
-
-<div id="menuUser" style="display:none">
   <div class="card">
-    <h2>👤 Menu User</h2>
+    <h2>Beli Paket 🔥</h2>
 
-    <p id="namaUser">
-      Username: -
-    </p>
+    <input id="nomor" placeholder="Masukkan nomor tujuan">
 
-    <p id="saldoUser">
-      Saldo: Rp0
-    </p>
+    <select id="paket">
+      <option>SuperMini - Rp45.000</option>
+      <option>Mini - Rp58.000</option>
+      <option>Big - Rp62.000</option>
+      <option>Jumbo V2 - Rp72.000</option>
+      <option>MegaBig - Rp97.000</option>
+      <option>Jumbo - Rp99.000</option>
+    </select>
 
-    <h3 onclick="toggleRiwayat()" style="cursor:pointer">
-📜 Riwayat Transaksi <span id="panah">▼</span>
-</h3>
+    <button onclick="beli()">Beli Sekarang</button>
+    <button class="btn-secondary" onclick="cekStatus()">Cek Status</button>
+    <button class="btn-secondary" onclick="cekStok()">📦 Cek Stok Kuota</button>
 
-<div id="riwayat">
-</div>
-
-    <button onclick="topup()"
-style="margin-bottom:15px;">
-💰 Top Up Saldo
-</button>
-
-<div id="adminPanel" style="display:none">
-
-<hr style="margin:20px 0">
-
-<h2>👑 Admin Panel</h2>
-
-<input
-id="userTopup"
-placeholder="Username">
-
-<input
-id="nominalTopup"
-placeholder="Nominal">
-
-<button onclick="tambahSaldo()">
-Tambah Saldo 💰
-</button>
-
-</div>
-
-    <button onclick="logout()"
-style="margin-top:20px;">
-Logout 🚪
-</button>
-
+    <div id="stokhasil"></div>
+    <p id="hasil"></p>
   </div>
-</div>
 
-
-<div class="card">
-<h2>Beli Paket 🔥</h2>
-
-<input id="nomor" placeholder="Masukkan nomor tujuan"
-style="width:95%;padding:10px;margin-bottom:10px;border-radius:8px;">
-
-<select id="paket"
-style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;">
-
-<option>SuperMini - Rp45.000</option>
-<option>Mini - Rp58.000</option>
-<option>Big - Rp62.000</option>
-<option>Jumbo V2 - Rp72.000</option>
-<option>MegaBig - Rp97.000</option>
-<option>Jumbo - Rp99.000</option>
-
-</select>
-
-<button onclick="beli()"
-style="width:100%;padding:12px;border:none;border-radius:8px;cursor:pointer;">
-Beli Sekarang
-</button>
-
-<button onclick="cekStatus()"
-style="width:100%;padding:12px;border:none;border-radius:8px;cursor:pointer;margin-top:10px;">
-Cek Status
-</button>
-
-<button onclick="cekStok()" style="margin-top:10px;">
-📦 Cek Stok Kuota
-</button>
-
-<div id="stokhasil"></div>
-<p id="hasil"></p>
-
-
+  <div class="footer-space"></div>
 </div>
 
 <script>
-
 let sudahLogin=false;
 let idtrxTerakhir="";
 
 if(localStorage.getItem("login")){
-sudahLogin=true;
+  sudahLogin=true;
 }
 
 window.onload=function(){
 
-if(sudahLogin){
+  if(sudahLogin){
 
-document.getElementById(
-"loginbox"
-).style.display="none";
+    document.getElementById("loginbox").style.display="none";
+    document.getElementById("menuUser").style.display="block";
 
-document.getElementById(
-"menuUser"
-).style.display="block";
-ambilRiwayat();
+    const username = localStorage.getItem("username") || "-";
+    const saldo = localStorage.getItem("saldo") || 0;
 
-if(
-localStorage.getItem("username")
-=="yaditaoh"
-){
+    document.getElementById("namaUser").textContent="👤 "+username;
+    document.getElementById("saldoUser").innerHTML=
+      "💰 Saldo: Rp"+Number(saldo).toLocaleString("id-ID");
 
-document.getElementById(
-"adminPanel"
-).style.display="block";
+    ambilRiwayat();
 
+    if(username=="yaditaoh"){
+      document.getElementById("adminPanel").style.display="block";
+    }
+  }
 }
 
-document.getElementById(
-"namaUser"
-).textContent=
-"👤 "+data.username;
-localStorage.getItem(
-"username"
-);
-console.log(
-"SALDO LOCAL:",
-localStorage.getItem("saldo")
-);
-document.getElementById(
-"saldoUser"
-).innerHTML=
-"💰 Saldo: Rp"+
-Number(
-localStorage.getItem("saldo")
-).toLocaleString("id-ID");
-}
-
-}
 async function beli(){
 
-let nomor=document.getElementById("nomor").value;
-let paket=document.getElementById("paket").value;
-let hasil=document.getElementById("hasil");
+  let nomor=document.getElementById("nomor").value;
+  let paket=document.getElementById("paket").value;
+  let hasil=document.getElementById("hasil");
 
-if(!sudahLogin){
-hasil.innerHTML="❌ Login dulu sebelum order";
-return;
-}
+  if(!sudahLogin){
+    hasil.innerHTML="❌ Login dulu sebelum order";
+    return;
+  }
 
-if(!nomor){
-hasil.innerHTML="❌ Nomor belum diisi";
-return;
-}
+  if(!nomor){
+    hasil.innerHTML="❌ Nomor belum diisi";
+    return;
+  }
 
-hasil.innerHTML="⏳ Memproses pesanan...";
+  hasil.innerHTML="⏳ Memproses pesanan...";
 
-const response=await fetch("/beli",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-nomor,
-paket,
-username:localStorage.getItem("username")?.trim()
-})
-});
+  const response=await fetch("/beli",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      nomor,
+      paket,
+      username:localStorage.getItem("username")?.trim()
+    })
+  });
 
-const data=await response.json();
+  const data=await response.json();
 
-console.log("RESPON BACKEND:",data);
+  console.log("RESPON BACKEND:",data);
 
-idtrxTerakhir =
-data.data?.reffid ||
-data.data?.data?.reffid ||
-data.reffid ||
-data.refid ||
-"-";
+  idtrxTerakhir =
+    data.data?.reffid ||
+    data.data?.data?.reffid ||
+    data.reffid ||
+    data.refid ||
+    "-";
 
-if(!data.sukses){
-hasil.innerHTML=
-"❌ "+data.pesan+
-(idtrxTerakhir!="-" ? "<br>ID: "+idtrxTerakhir : "");
-return;
-}
+  if(!data.sukses){
+    hasil.innerHTML=
+      "❌ "+data.pesan+
+      (idtrxTerakhir!="-" ? "<br>ID: "+idtrxTerakhir : "");
+    ambilRiwayat();
+    return;
+  }
 
-hasil.innerHTML=
-"✅ "+data.pesan+
-"<br>ID: "+idtrxTerakhir;
+  hasil.innerHTML=
+    data.pesan+
+    "<br>ID: "+idtrxTerakhir;
 
+  ambilRiwayat();
 }
 
 async function cekStatus(){
 
-let hasil=document.getElementById("hasil");
+  let hasil=document.getElementById("hasil");
 
-if(!idtrxTerakhir || idtrxTerakhir=="-"){
-hasil.innerHTML+="<br>❌ Belum ada ID transaksi";
-return;
-}
+  if(!idtrxTerakhir || idtrxTerakhir=="-"){
+    hasil.innerHTML+="<br>❌ Belum ada ID transaksi";
+    return;
+  }
 
-hasil.innerHTML+="<br>⏳ Mengecek status...";
+  hasil.innerHTML+="<br>⏳ Mengecek status...";
 
-const response=await fetch("/cek/"+idtrxTerakhir);
+  const response=await fetch("/cek/"+idtrxTerakhir);
+  const data=await response.json();
 
-const data=await response.json();
+  console.log("STATUS:",data);
 
-console.log("STATUS:",data);
+  if(!data.data || data.data.length === 0){
 
-if (!data.data || data.data.length === 0) {
+    hasil.innerHTML += `
+    <br><br>📦 Status Pesanan
+    <br>📊 Status: MASIH DIPROSES ⏳
+    `;
 
-hasil.innerHTML += `
-<br><br>📦 Status Pesanan
-<br>📊 Status: MASIH DIPROSES ⏳
-`;
+  } else {
 
-} else {
+    const trx = data.data[0];
 
-const trx = data.data[0];
+    hasil.innerHTML += `
+    <br><br>📦 Status Pesanan
+    <br>🆔 ID: ${trx.kode}
+    <br>📱 Tujuan: ${trx.tujuan}
+    <br>📦 Produk: ${trx.kode_produk}
+    <br>📊 Status: ${trx.status_text}
+    `;
 
-hasil.innerHTML += `
-<br><br>📦 Status Pesanan
-<br>🆔 ID: ${trx.kode}
-<br>📱 Tujuan: ${trx.tujuan}
-<br>📦 Produk: ${trx.kode_produk}
-<br>📊 Status: ${trx.status_text}
-`;
-
-}
-
+  }
 }
 
 async function daftar(){
 
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
+  let u=document.getElementById("user").value;
+  let p=document.getElementById("pass").value;
 
-if(!u.trim() || !p.trim()){
+  if(!u.trim() || !p.trim()){
+    alert("❌ Username & password wajib diisi");
+    return;
+  }
 
-alert("❌ Username & password wajib diisi");
+  const response=await fetch("/daftar",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      username:u,
+      password:p
+    })
+  });
 
-return;
-
-}
-
-const response=await fetch("/daftar",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-username:u,
-password:p
-})
-});
-
-const data=await response.json();
-
-document.getElementById(
-"daftarhasil"
-).innerHTML=data.pesan;
-
+  const data=await response.json();
+  document.getElementById("daftarhasil").innerHTML=data.pesan;
 }
 
 async function login(){
 
-let u=document.getElementById("loginuser").value;
-let p=document.getElementById("loginpass").value;
+  let u=document.getElementById("loginuser").value;
+  let p=document.getElementById("loginpass").value;
 
-if(!u.trim() || !p.trim()){
+  if(!u.trim() || !p.trim()){
+    alert("❌ Isi username & password dulu");
+    return;
+  }
 
-alert("❌ Isi username & password dulu");
+  const response=await fetch("/login",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      username:u,
+      password:p
+    })
+  });
 
-return;
+  const data=await response.json();
+  console.log("DATA LOGIN:",data);
 
-}
+  if(data.sukses){
 
-const response=await fetch("/login",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-username:u,
-password:p
-})
-});
+    sudahLogin=true;
 
-const data=await response.json();
-console.log("DATA LOGIN:",data);
-if(data.sukses){
+    localStorage.setItem("login","true");
+    localStorage.setItem("username",data.username);
+    localStorage.setItem("saldo",data.saldo);
 
-sudahLogin=true;
+    document.getElementById("namaUser").textContent="👤 "+data.username;
+    document.getElementById("saldoUser").innerHTML=
+      "💰 Saldo: Rp"+Number(data.saldo).toLocaleString("id-ID");
 
-localStorage.setItem(
-"login",
-"true"
-);
+    if(data.username=="yaditaoh"){
+      document.getElementById("adminPanel").style.display="block";
+    }
 
-localStorage.setItem(
-"username",
-data.username
-);
+    document.getElementById("loginbox").style.display="none";
+    document.getElementById("menuUser").style.display="block";
 
-localStorage.setItem(
-"saldo",
-data.saldo
-);
+    ambilRiwayat();
 
-document.getElementById(
-"namaUser"
-).textContent=
-"👤 "+data.username;
+  }else{
 
-document.getElementById(
-"saldoUser"
-).innerHTML=
-"💰 Saldo: Rp"+
-Number(data.saldo)
-.toLocaleString("id-ID");
+    document.getElementById("loginhasil").innerHTML="❌ "+data.pesan;
 
-if(data.username=="yaditaoh"){
-
-document.getElementById(
-"adminPanel"
-).style.display="block";
-
-}
-
-document.getElementById(
-"loginbox"
-).style.display="none";
-
-document.getElementById(
-"menuUser"
-).style.display="block";
-ambilRiwayat();
-
-}else{
-
-document.getElementById(
-"loginhasil"
-).innerHTML=
-"❌ "+data.pesan;
-
-}
-
+  }
 }
 
 function logout(){
-
-localStorage.removeItem("login");
-
-sudahLogin=false;
-
-location.reload();
-
+  localStorage.removeItem("login");
+  localStorage.removeItem("username");
+  localStorage.removeItem("saldo");
+  sudahLogin=false;
+  location.reload();
 }
 
 function topup(){
-
-alert(
-"Fitur top up saldo segera hadir"
-);
-
+  alert("Untuk deposit, hubungi admin. Sekali deposit saldo tidak bisa ditarik lagi ya.");
 }
 
 async function tambahSaldo(){
 
-let user=
-document.getElementById(
-"userTopup"
-).value;
+  let user=document.getElementById("userTopup").value;
+  let nominal=document.getElementById("nominalTopup").value;
 
-let nominal=
-document.getElementById(
-"nominalTopup"
-).value;
+  if(!user || !nominal){
+    alert("Isi username & nominal 😭");
+    return;
+  }
 
-if(!user || !nominal){
+  const response=await fetch("/tambahsaldo",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify({
+      username:user.trim(),
+      nominal:nominal.trim()
+    })
+  });
 
-alert(
-"Isi username & nominal 😭"
-);
+  const data=await response.json();
 
-return;
+  alert(data.pesan);
 
-}
-
-const response=
-await fetch(
-"/tambahsaldo",
-{
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:JSON.stringify({
-username:user.trim(),
-nominal:nominal.trim()
-})
-
-}
-);
-
-const data=
-await response.json();
-
-alert(data.pesan);
-
-if(data.sukses){
-
-document.getElementById(
-"userTopup"
-).value="";
-
-document.getElementById(
-"nominalTopup"
-).value="";
-
-}
-
+  if(data.sukses){
+    document.getElementById("userTopup").value="";
+    document.getElementById("nominalTopup").value="";
+  }
 }
 
 async function ambilRiwayat(){
 
-const username=
-localStorage.getItem(
-"username"
-);
+  const username=localStorage.getItem("username");
 
-const response=
-await fetch(
-"/riwayat/"+username
-);
+  const response=await fetch("/riwayat/"+username);
+  const data=await response.json();
 
-const data=
-await response.json();
+  let html="";
 
-let html="";
+  if(data.length==0){
 
-if(data.length==0){
+    html=`<div class="item-card">Belum ada transaksi 😭</div>`;
 
-html=
-"Belum ada transaksi 😭";
+  }else{
 
-}else{
+    data.forEach(item=>{
 
-data.forEach(item=>{
+      html+=`
+      <div class="item-card">
+        📦 <b>${item.paket}</b><br>
+        📱 ${item.nomor}<br>
+        💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
+        ${item.status=="sukses" ? "✅" : "❌"} ${item.status}
+      </div>
+      `;
 
-html+=`
-<div style="
-border:1px solid #444;
-padding:10px;
-margin-top:10px;
-border-radius:10px;
-">
+    });
+  }
 
-📦 ${item.paket}<br>
-
-📱 ${item.nomor}<br>
-
-💰 Rp${Number(item.harga)
-.toLocaleString("id-ID")}<br>
-
-${item.status=="sukses"
-?"✅"
-:"❌"}
-
-${item.status}
-
-</div>
-`;
-
-});
-
-}
-
-document.getElementById(
-"riwayat"
-).innerHTML=html;
-
+  document.getElementById("riwayat").innerHTML=html;
 }
 
 async function cekStok(){
 
-let stokhasil=document.getElementById("stokhasil");
+  let stokhasil=document.getElementById("stokhasil");
 
-stokhasil.innerHTML="⏳ Mengecek stok...";
+  stokhasil.innerHTML="⏳ Mengecek stok...";
 
-const response=await fetch("/cekstok");
-const data=await response.json();
+  const response=await fetch("/cekstok");
+  const data=await response.json();
 
-if(!data.sukses){
+  if(!data.sukses){
+    stokhasil.innerHTML="❌ Gagal cek stok";
+    return;
+  }
 
-stokhasil.innerHTML="❌ Gagal cek stok";
-return;
+  let html="";
 
-}
+  data.data.data.forEach(item=>{
 
-let html="";
+    html+=`
+    <div class="item-card">
+      📦 <b>${item.nama}</b><br>
+      🏷️ ${item.type}<br>
+      ${item.sisa_slot > 0
+        ? "🟢 Tersedia: "+item.sisa_slot
+        : "🔴 Stok Habis"}
+    </div>
+    `;
 
-data.data.data.forEach(item=>{
+  });
 
-html+=`
-
-<div style="
-border:1px solid #444;
-padding:10px;
-margin-top:10px;
-border-radius:10px;
-">
-
-📦 ${item.nama}<br>
-
-🏷️ ${item.type}<br>
-
-${item.sisa_slot > 0
-? "🟢 Tersedia: "+item.sisa_slot
-: "🔴 Stok Habis"}
-
-</div>
-
-`;
-
-});
-
-stokhasil.innerHTML=html;
-
+  stokhasil.innerHTML=html;
 }
 
 function toggleRiwayat(){
 
-const riwayat=document.getElementById("riwayat");
-const panah=document.getElementById("panah");
+  const riwayat=document.getElementById("riwayat");
+  const panah=document.getElementById("panah");
 
-if(riwayat.style.display==="none"){
-
-riwayat.style.display="block";
-panah.innerText="▼";
-
-}else{
-
-riwayat.style.display="none";
-panah.innerText="▶";
-
-}
-
+  if(riwayat.style.display==="none" || riwayat.style.display===""){
+    riwayat.style.display="block";
+    panah.innerText="▼";
+  }else{
+    riwayat.style.display="none";
+    panah.innerText="▶";
+  }
 }
 </script>
 </body>
