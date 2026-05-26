@@ -101,7 +101,7 @@ app.post("/beli", async (req, res) => {
       const updateSaldo = await axios.patch(
         `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
         {
-          saldo: user.saldo - harga
+          saldo: Number(user.saldo) - Number(harga)
         },
         {
           headers: {

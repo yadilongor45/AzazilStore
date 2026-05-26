@@ -10,6 +10,9 @@ content="width=device-width, initial-scale=1.0">
 <title>Azazil Store</title>
 
 <style>
+#riwayat{
+display:none;
+}
 
 *{
 margin:0;
@@ -189,10 +192,11 @@ Daftar
       Saldo: Rp0
     </p>
 
-    <h3>📜 Riwayat Transaksi</h3>
+    <h3 onclick="toggleRiwayat()" style="cursor:pointer">
+📜 Riwayat Transaksi <span id="panah">▼</span>
+</h3>
 
 <div id="riwayat">
-Belum ada transaksi
 </div>
 
     <button onclick="topup()"
@@ -714,6 +718,25 @@ ${item.sisa_slot > 0
 });
 
 stokhasil.innerHTML=html;
+
+}
+
+function toggleRiwayat(){
+
+const riwayat=document.getElementById("riwayat");
+const panah=document.getElementById("panah");
+
+if(riwayat.style.display==="none"){
+
+riwayat.style.display="block";
+panah.innerText="▼";
+
+}else{
+
+riwayat.style.display="none";
+panah.innerText="▶";
+
+}
 
 }
 </script>
