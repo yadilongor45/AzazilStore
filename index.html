@@ -347,7 +347,7 @@ headers:{
 body:JSON.stringify({
 nomor,
 paket,
-username:localStorage.getItem("username")
+username:localStorage.getItem("username")?.trim()
 })
 });
 

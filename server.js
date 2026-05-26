@@ -19,222 +19,203 @@ const produkMap = {
   "Jumbo - Rp99.000": "XLA65"
 };
 
+const hargaMap = {
+  "SuperMini - Rp45.000": 45000,
+  "Mini - Rp58.000": 58000,
+  "Big - Rp62.000": 62000,
+  "Jumbo V2 - Rp72.000": 72000,
+  "MegaBig - Rp97.000": 97000,
+  "Jumbo - Rp99.000": 99000
+};
+
 app.use(express.json());
 app.use(express.static(__dirname));
 
-app.post("/beli", async(req,res)=>{
-try{
+app.post("/beli", async (req, res) => {
+  try {
+    const { nomor, paket, username } = req.body;
+    console.log("USER BELI:", username);
 
-const {nomor,paket,username}=req.body;
+    const kodeProduk = produkMap[paket];
+    const harga = hargaMap[paket];
 
-const kodeProduk=produkMap[paket];
+    if (!kodeProduk || !harga) {
+      return res.json({
+        sukses: false,
+        pesan: "❌ Paket tidak valid"
+      });
+    }
 
-if(!kodeProduk){
+    const userResponse = await axios.get(
+      `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
 
-return res.json({
-sukses:false,
-pesan:"❌ Paket tidak valid"
+    const user = userResponse.data[0];
+
+    if (!user) {
+      return res.json({
+        sukses: false,
+        pesan: "User tidak ditemukan"
+      });
+    }
+
+    if (user.saldo < harga) {
+      return res.json({
+        sukses: false,
+        pesan: "Saldo tidak cukup top up dulu tod"
+      });
+    }
+
+    const response = await axios.get(
+      `${BASE_URL}/trx?produk=${kodeProduk}&tujuan=${nomor}&api_key=${API_KEY}`
+    );
+
+    const dataKhfy = response.data;
+    console.log("RESPON KHFY:", dataKhfy);
+
+    const teks = JSON.stringify(dataKhfy).toLowerCase();
+
+    const reffid =
+      dataKhfy.data?.reffid ||
+      dataKhfy.reffid ||
+      dataKhfy.refid ||
+      "-";
+
+    const gagal =
+      dataKhfy.ok === false ||
+      teks.includes("saldo tidak mencukupi") ||
+      teks.includes("stok kosong") ||
+      teks.includes("produk salah") ||
+      teks.includes("gagal") ||
+      teks.includes("error");
+
+    const sukses = dataKhfy.ok === true && !gagal;
+
+    if (sukses) {
+      const updateSaldo = await axios.patch(
+        `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
+        {
+          saldo: user.saldo - harga
+        },
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json",
+            Prefer: "return=representation"
+          }
+        }
+      );
+
+      console.log("UPDATE SALDO:", updateSaldo.data);
+    }
+
+    await axios.post(
+      `${SUPABASE_URL}/rest/v1/transaksi`,
+      {
+        username,
+        nomor,
+        paket,
+        harga,
+        status: sukses ? "sukses" : "gagal",
+        reffid
+      },
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json"
+        }
+      }
+    );
+
+    return res.json({
+      sukses,
+      pesan: teks.includes("stok kosong")
+        ? "📦 Stok paket sedang kosong 😭"
+        : gagal
+        ? "Transaksi gagal, cek nomor atau coba lagi"
+        : "✅ Pesanan dikirim 🔥",
+      data: {
+        reffid
+      }
+    });
+  } catch (err) {
+    console.log("ERROR BELI:", err.response?.data || err.message);
+
+    return res.json({
+      sukses: false,
+      pesan: "SERVER ERROR"
+    });
+  }
 });
 
-}
+app.get("/cek/:refid", async (req, res) => {
+  try {
+    const refid = req.params.refid;
+    console.log("REFID DICEK:", refid);
 
-const hargaMap={
+    const response = await axios.get(
+      `${BASE_URL}/history?api_key=${API_KEY}&refid=${refid}`
+    );
 
-"SuperMini - Rp45.000":45000,
-"Mini - Rp58.000":58000,
-"Big - Rp62.000":62000,
-"Jumbo V2 - Rp72.000":72000,
-"MegaBig - Rp97.000":97000,
-"Jumbo - Rp99.000":99000
+    console.log("STATUS:", response.data);
 
-};
+    return res.json(response.data);
+  } catch (err) {
+    console.log("ERROR CEK STATUS:", err.response?.data);
+    console.log("STATUS CODE:", err.response?.status);
 
-const harga=hargaMap[paket];
-const userResponse=await axios.get(
-`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:`Bearer ${SUPABASE_KEY}`
-}
-}
-);
-
-const user=userResponse.data[0];
-
-if(!user){
-
-return res.json({
-sukses:false,
-pesan:"User tidak ditemukan"
+    return res.json({
+      sukses: false,
+      pesan: "Gagal cek status",
+      status: err.response?.status,
+      detail: err.response?.data
+    });
+  }
 });
 
-}
-
-if(user.saldo < harga){
-
-return res.json({
-sukses:false,
-pesan:"Saldo tidak cukup top up dulu tod"
-});
-
-}
-const response=await axios.get(
-`${BASE_URL}/trx?produk=${kodeProduk}&tujuan=${nomor}&api_key=${API_KEY}`
-);
-
-const dataKhfy=response.data;
-
-console.log("RESPON KHFY:",dataKhfy);
-
-const teks=JSON.stringify(dataKhfy).toLowerCase();
-
-const reffid =
-dataKhfy.data?.reffid ||
-dataKhfy.reffid ||
-dataKhfy.refid ||
-"-";
-
-const gagal =
-dataKhfy.ok === false ||
-teks.includes("saldo tidak mencukupi") ||
-teks.includes("stok kosong") ||
-teks.includes("produk salah") ||
-teks.includes("gagal") ||
-teks.includes("error");
-
-const sukses =
-dataKhfy.ok === true &&
-!gagal;
-
-if(sukses){
-
-await axios.patch(
-`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
-{
-saldo:user.saldo-harga
-},
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:`Bearer ${SUPABASE_KEY}`,
-"Content-Type":"application/json",
-Prefer:"return=minimal"
-}
-}
-);
-
-}
-
-await axios.post(
-`${SUPABASE_URL}/rest/v1/transaksi`,
-{
-username,
-nomor,
-paket,
-harga,
-status:sukses ? "sukses":"gagal",
-reffid
-},
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:`Bearer ${SUPABASE_KEY}`,
-"Content-Type":"application/json"
-}
-}
-);
-
-return res.json({
-sukses,
-pesan: teks.includes("stok kosong")
-? "📦 Stok paket sedang kosong 😭"
-: gagal
-? "❌ Transaksi gagal, cek nomor atau coba lagi"
-: "✅ Pesanan dikirim 🔥",
-
-data:{
-reffid
-}
-
-});
-
-}catch(err){
-
-res.json({
-sukses:false,
-pesan:"SERVER ERROR"
-});
-
-}
-
-});
-
-app.get("/cek/:refid", async(req,res)=>{
-try{
-
-const refid=req.params.refid;
-console.log("REFID DICEK:", refid);
-console.log("STATUS:", response.data);
-
-const response=await axios.get(
-`${BASE_URL}/history?api_key=${API_KEY}&refid=${refid}`
-);
-
-res.json(response.data);
-
-}catch(err){
-
-console.log("ERROR CEK STATUS:", err.response?.data);
-console.log("STATUS CODE:", err.response?.status);
-
-res.json({
-sukses:false,
-pesan:"Gagal cek status",
-status:err.response?.status,
-detail:err.response?.data
-});
-
-}
-
-});
 app.post("/daftar", async (req, res) => {
   try {
     const { username, password } = req.body;
-if(
-username.includes("<") ||
-username.includes(">") ||
-username.toLowerCase().includes("script")
-){
 
-return res.json({
-sukses:false,
-pesan:"❌ Username tidak valid"
-});
+    if (
+      username.includes("<") ||
+      username.includes(">") ||
+      username.toLowerCase().includes("script")
+    ) {
+      return res.json({
+        sukses: false,
+        pesan: "❌ Username tidak valid"
+      });
+    }
 
-}
+    const cekUser = await axios.get(
+      `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
 
-const cekUser = await axios.get(
-`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:`Bearer ${SUPABASE_KEY}`
-}
-}
-);
+    if (cekUser.data.length > 0) {
+      return res.json({
+        sukses: false,
+        pesan: "❌ Username sudah dipakai"
+      });
+    }
 
-if(cekUser.data.length>0){
-
-return res.json({
-sukses:false,
-pesan:"❌ Username sudah dipakai"
-});
-
-}
     await axios.post(
       `${SUPABASE_URL}/rest/v1/users`,
-      { username, password },
+      { username, password, saldo: 0 },
       {
         headers: {
           apikey: SUPABASE_KEY,
@@ -245,13 +226,14 @@ pesan:"❌ Username sudah dipakai"
       }
     );
 
-    res.json({ sukses: true, pesan: "Akun berhasil dibuat 🔥" });
+    return res.json({
+      sukses: true,
+      pesan: "Akun berhasil dibuat 🔥"
+    });
   } catch (err) {
-    res.json({
+    return res.json({
       sukses: false,
-      pesan: "SERVER ERROR: " + err.message,
-      status: err.response?.status,
-      detail: err.response?.data
+      pesan: "SERVER ERROR: " + err.message
     });
   }
 });
@@ -270,180 +252,124 @@ app.post("/login", async (req, res) => {
       }
     );
 
-if (response.data.length > 0) {
+    if (response.data.length > 0) {
+      const user = response.data[0];
 
-const user=response.data[0];
+      return res.json({
+        sukses: true,
+        pesan: "Login berhasil 🔥",
+        username: user.username,
+        saldo: user.saldo || 0
+      });
+    }
 
-return res.json({
-sukses:true,
-pesan:"Login berhasil 🔥",
-username:user.username,
-saldo:user.saldo
-});
-
-}
-
-    res.json({ sukses: false, pesan: "Username/password salah" });
-  } catch (err) {
-    res.json({
+    return res.json({
       sukses: false,
-      pesan: "SERVER ERROR: " + err.message,
-      status: err.response?.status,
-      detail: err.response?.data
+      pesan: "Username/password salah"
+    });
+  } catch (err) {
+    return res.json({
+      sukses: false,
+      pesan: "SERVER ERROR: " + err.message
     });
   }
 });
 
-app.post("/tambahsaldo", async(req,res)=>{
+app.post("/tambahsaldo", async (req, res) => {
+  try {
+    const { username, nominal } = req.body;
 
-try{
+    const userResponse = await axios.get(
+      `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
 
-const {
-username,
-nominal
-}=req.body;
+    const user = userResponse.data[0];
 
-const userResponse=
-await axios.get(
+    if (!user) {
+      return res.json({
+        sukses: false,
+        pesan: "User tidak ditemukan"
+      });
+    }
 
-`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+    const updateResponse = await axios.patch(
+      `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
+      {
+        saldo: Number(user.saldo) + Number(nominal)
+      },
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          Prefer: "return=representation"
+        }
+      }
+    );
 
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:`Bearer ${SUPABASE_KEY}`,
-"Content-Type":"application/json",
-Prefer:"return=representation"
-}
+    console.log("UPDATE SALDO:", updateResponse.data);
 
-}
+    return res.json({
+      sukses: true,
+      pesan: "Saldo berhasil ditambah 😭🔥"
+    });
+  } catch (err) {
+    console.log("ERROR TAMBAH SALDO:", err.response?.data || err.message);
 
-);
-
-const user=
-userResponse.data[0];
-
-if(!user){
-
-return res.json({
-
-sukses:false,
-pesan:"User tidak ditemukan"
-
+    return res.json({
+      sukses: false,
+      pesan: "Server error"
+    });
+  }
 });
 
-}
+app.get("/riwayat/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
 
-const updateResponse = await axios.patch(
+    const response = await axios.get(
+      `${SUPABASE_URL}/rest/v1/transaksi?username=eq.${username}&order=id.desc`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
 
-`${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
-
-{
-saldo:
-Number(
-user.saldo
-)+
-Number(
-nominal
-)
-},
-
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:
-`Bearer ${SUPABASE_KEY}`,
-"Content-Type":
-"application/json"
-}
-}
-
-);
-
-console.log("UPDATE SALDO:", updateResponse.data);
-
-return res.json({
-
-sukses:true,
-pesan:
-"Saldo berhasil ditambah 😭🔥"
-
+    return res.json(response.data);
+  } catch (err) {
+    return res.json([]);
+  }
 });
 
-}catch(err){
+app.get("/cekstok", async (req, res) => {
+  try {
+    const response = await axios.get(
+      "https://panel.khfy-store.com/api_v3/cek_stock_akrab",
+      {
+        params: {
+          api_key: API_KEY
+        }
+      }
+    );
 
-console.log("ERROR TAMBAH SALDO:", err.response?.data || err.message);
-
-return res.json({
-sukses:false,
-pesan:"Server error"
-});
-
-}
-
-});
-
-app.get("/riwayat/:username", async(req,res)=>{
-
-try{
-
-const username=
-req.params.username;
-
-const response=
-await axios.get(
-
-`${SUPABASE_URL}/rest/v1/transaksi?username=eq.${username}&order=id.desc`,
-
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:
-`Bearer ${SUPABASE_KEY}`
-}
-}
-
-);
-
-return res.json(
-response.data
-);
-
-}catch(err){
-
-return res.json([]);
-
-}
-
-});
-
-app.get("/cekstok", async(req,res)=>{
-
-try{
-
-const response=await axios.get(
-"https://panel.khfy-store.com/api_v3/cek_stock_akrab",
-{
-params:{
-api_key:API_KEY
-}
-}
-);
-
-return res.json({
-sukses:true,
-data:response.data
-});
-
-}catch(err){
-
-return res.json({
-sukses:false,
-pesan:"Gagal cek stok"
-});
-
-}
-
+    return res.json({
+      sukses: true,
+      data: response.data
+    });
+  } catch (err) {
+    return res.json({
+      sukses: false,
+      pesan: "Gagal cek stok"
+    });
+  }
 });
 
 app.get("/", (req, res) => {
