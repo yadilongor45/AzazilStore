@@ -201,6 +201,18 @@ detail:err.response?.data
 app.post("/daftar", async (req, res) => {
   try {
     const { username, password } = req.body;
+if(
+username.includes("<") ||
+username.includes(">") ||
+username.toLowerCase().includes("script")
+){
+
+return res.json({
+sukses:false,
+pesan:"❌ Username tidak valid"
+});
+
+}
 
 const cekUser = await axios.get(
 `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
