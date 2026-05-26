@@ -392,10 +392,26 @@ const data=await response.json();
 
 console.log("STATUS:",data);
 
-hasil.innerHTML +=
-"<br><br>📦 Status:<pre>"+
-JSON.stringify(data,null,2)+
-"</pre>";
+if (!data.data || data.data.length === 0) {
+
+hasil.innerHTML += `
+<br><br>📦 Status Pesanan
+<br>📊 Status: MASIH DIPROSES ⏳
+`;
+
+} else {
+
+const trx = data.data[0];
+
+hasil.innerHTML += `
+<br><br>📦 Status Pesanan
+<br>🆔 ID: ${trx.kode}
+<br>📱 Tujuan: ${trx.tujuan}
+<br>📦 Produk: ${trx.kode_produk}
+<br>📊 Status: ${trx.status_text}
+`;
+
+}
 
 }
 

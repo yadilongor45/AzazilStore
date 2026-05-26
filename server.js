@@ -117,43 +117,51 @@ app.post("/beli", async (req, res) => {
     }
 
     await axios.post(
-      `${SUPABASE_URL}/rest/v1/transaksi`,
-      {
-        username,
-        nomor,
-        paket,
-        harga,
-        status: sukses ? "sukses" : "gagal",
-        reffid
-      },
-      {
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: `Bearer ${SUPABASE_KEY}`,
-          "Content-Type": "application/json"
-        }
-      }
-    );
-
-    return res.json({
-      sukses,
-      pesan: teks.includes("stok kosong")
-        ? "📦 Stok paket sedang kosong 😭"
-        : gagal
-        ? "Transaksi gagal, cek nomor atau coba lagi"
-        : "✅ Pesanan dikirim 🔥",
-      data: {
-        reffid
-      }
-    });
-  } catch (err) {
-    console.log("ERROR BELI:", err.response?.data || err.message);
-
-    return res.json({
-      sukses: false,
-      pesan: "SERVER ERROR"
-    });
+  `${SUPABASE_URL}/rest/v1/transaksi`,
+  {
+    username,
+    nomor,
+    paket,
+    harga,
+    status: sukses ? "sukses" : "gagal",
+    reffid
+  },
+  {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      "Content-Type": "application/json"
+    }
   }
+);
+
+return res.json({
+  sukses,
+  pesan: teks.includes("stok kosong")
+    ? "📦 Stok paket sedang kosong 😭"
+    : gagal
+    ? "Transaksi gagal, cek nomor atau coba lagi"
+    : `✅ Pesanan dikirim 🔥
+🆔 ID: ${reffid}
+⏳ Mengecek status...
+
+📦 Status Pesanan
+📱 Nomor: ${nomor}
+📦 Paket: ${paket}
+📊 Status: PENDING`,
+  data: {
+    reffid
+  }
+});
+
+} catch (err) {
+  console.log("ERROR BELI:", err.response?.data || err.message);
+
+  return res.json({
+    sukses: false,
+    pesan: "SERVER ERROR"
+  });
+}
 });
 
 app.get("/cek/:refid", async (req, res) => {
