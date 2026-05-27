@@ -98,25 +98,48 @@ app.post("/beli", async (req, res) => {
 
     const sukses = dataKhfy.ok === true && !gagal;
 
-    if (sukses) {
-      const updateSaldo = await axios.patch(
-        `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
-        {
-          saldo: Number(user.saldo) - Number(harga)
-        },
-        {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`,
-            "Content-Type": "application/json",
-            Prefer: "return=representation"
-          }
-        }
-      );
+    let saldoBaru = Number(user.saldo);
 
-      console.log("UPDATE SALDO:", updateSaldo.data);
-    }
+if (sukses) {
 
+saldoBaru -= Number(harga);
+
+console.log("SALDO LAMA:",user.saldo);
+console.log("HARGA:",harga);
+console.log("SALDO BARU:",saldoBaru);
+
+try{
+
+const updateSaldo=await axios.patch(
+`${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
+{
+saldo:saldoBaru
+},
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:`Bearer ${SUPABASE_KEY}`,
+"Content-Type":"application/json",
+Prefer:"return=representation"
+}
+}
+);
+
+console.log(
+"UPDATE SALDO:",
+updateSaldo.data
+);
+
+}catch(e){
+
+console.log(
+"SALDO ERROR:",
+e.response?.data || e.message
+);
+
+}
+
+}
     await axios.post(
   `${SUPABASE_URL}/rest/v1/transaksi`,
   {
