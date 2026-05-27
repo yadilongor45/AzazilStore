@@ -100,46 +100,6 @@ app.post("/beli", async (req, res) => {
 
     let saldoBaru = Number(user.saldo);
 
-if (sukses) {
-
-saldoBaru -= Number(harga);
-
-console.log("SALDO LAMA:",user.saldo);
-console.log("HARGA:",harga);
-console.log("SALDO BARU:",saldoBaru);
-
-try{
-
-const updateSaldo=await axios.patch(
-`${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
-{
-saldo:saldoBaru
-},
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:`Bearer ${SUPABASE_KEY}`,
-"Content-Type":"application/json",
-Prefer:"return=representation"
-}
-}
-);
-
-console.log(
-"UPDATE SALDO:",
-updateSaldo.data
-);
-
-}catch(e){
-
-console.log(
-"SALDO ERROR:",
-e.response?.data || e.message
-);
-
-}
-
-}
     await axios.post(
   `${SUPABASE_URL}/rest/v1/transaksi`,
   {
@@ -147,7 +107,7 @@ e.response?.data || e.message
     nomor,
     paket,
     harga,
-    status: sukses ? "sukses" : "gagal",
+    status: gagal ? "gagal" : "pending",
     reffid
   },
   {
@@ -188,34 +148,119 @@ return res.json({
 }
 });
 
-app.get("/cek/:reffid", async(req,res)=>{
+app.get("/cek/:reffid", async (req, res) => {
+  try {
+    const refid = req.params.reffid;
 
-try{
+    const cek = await axios.get(
+      `https://panel.khfy-store.com/api_v2/history?api_key=${API_KEY}&refid=${refid}`
+    );
 
-const refid=req.params.reffid;
+    console.log("REFID DICEK:", refid);
+    console.log("STATUS:", cek.data);
 
-const cek=await axios.get(
-`https://panel.khfy-store.com/api_v2/history?api_key=${API_KEY}&refid=${refid}`
-);
+    const trxKhfy = cek.data.data?.[0];
 
-console.log("REFID DICEK:",refid);
-console.log("STATUS:",cek.data);
+    if (!trxKhfy) {
+      return res.json(cek.data);
+    }
 
-res.json(cek.data);
+    const statusKhfy = String(trxKhfy.status_text || "").toUpperCase();
 
-}catch(err){
+    if (statusKhfy === "SUKSES") {
+      const transaksiRes = await axios.get(
+        `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}&limit=1`,
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
 
-console.log(
-"ERROR CEK:",
-err.response?.data || err.message
-);
+      const transaksi = transaksiRes.data[0];
 
-res.json({
-ok:false
-});
+      if (transaksi && transaksi.status !== "sukses") {
+        const username = transaksi.username;
+        const harga = Number(transaksi.harga);
 
-}
+        const userRes = await axios.get(
+          `${SUPABASE_URL}/rest/v1/users?username=eq.${username}&limit=1`,
+          {
+            headers: {
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`
+            }
+          }
+        );
 
+        const user = userRes.data[0];
+
+        if (user) {
+          const saldoBaru = Number(user.saldo) - harga;
+
+          const updateSaldo = await axios.patch(
+            `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+            {
+              saldo: saldoBaru
+            },
+            {
+              headers: {
+                apikey: SUPABASE_KEY,
+                Authorization: `Bearer ${SUPABASE_KEY}`,
+                "Content-Type": "application/json",
+                Prefer: "return=representation"
+              }
+            }
+          );
+
+          console.log("SALDO DIPOTONG:", updateSaldo.data);
+
+          await axios.patch(
+            `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}`,
+            {
+              status: "sukses"
+            },
+            {
+              headers: {
+                apikey: SUPABASE_KEY,
+                Authorization: `Bearer ${SUPABASE_KEY}`,
+                "Content-Type": "application/json"
+              }
+            }
+          );
+
+          cek.data.saldo_baru = saldoBaru;
+          cek.data.saldo_dipotong = true;
+        }
+      }
+    }
+
+    if (statusKhfy === "GAGAL") {
+      await axios.patch(
+        `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}`,
+        {
+          status: "gagal"
+        },
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: `Bearer ${SUPABASE_KEY}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+    }
+
+    return res.json(cek.data);
+
+  } catch (err) {
+    console.log("ERROR CEK:", err.response?.data || err.message);
+
+    return res.json({
+      ok: false
+    });
+  }
 });
 
 app.post("/daftar", async (req, res) => {
