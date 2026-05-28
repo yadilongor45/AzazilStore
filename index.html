@@ -68,11 +68,72 @@ body{
 
 .card{
   background:rgba(18,18,26,.92);
-  border:1px solid var(--line);
+  border:1px solid #333;
   border-radius:18px;
   padding:16px;
   margin-bottom:14px;
-  box-shadow:0 10px 28px rgba(0,0,0,.28);
+  position:relative;
+  overflow:hidden;
+
+  box-shadow:
+  0 0 10px #ff0000,
+  0 0 20px #ff0000;
+
+  animation:rgbGlow 4s linear infinite;
+}
+
+@keyframes rgbGlow{
+
+0%{
+box-shadow:
+0 0 10px #ff0000,
+0 0 20px #ff0000;
+}
+
+25%{
+box-shadow:
+0 0 10px #00ff00,
+0 0 20px #00ff00;
+}
+
+50%{
+box-shadow:
+0 0 10px #00ffff,
+0 0 20px #00ffff;
+}
+
+75%{
+box-shadow:
+0 0 10px #ff00ff,
+0 0 20px #ff00ff;
+}
+
+100%{
+box-shadow:
+0 0 10px #ff0000,
+0 0 20px #ff0000;
+}
+
+}
+
+.bubble{
+position:fixed;
+bottom:-100px;
+border-radius:50%;
+background:rgba(255,255,255,0.12);
+backdrop-filter:blur(2px);
+animation:naik linear forwards;
+pointer-events:none;
+z-index:0;
+}
+
+@keyframes naik{
+
+to{
+transform:translateY(-120vh);
+opacity:0;
+}
+
 }
 
 .card h2{
@@ -673,6 +734,32 @@ function toggleRiwayat(){
     panah.innerText="▶";
   }
 }
+
+function buatBubble(){
+
+const bubble=document.createElement("div");
+
+bubble.className="bubble";
+
+const size=Math.random()*60+20;
+
+bubble.style.width=size+"px";
+bubble.style.height=size+"px";
+
+bubble.style.left=Math.random()*100+"vw";
+
+bubble.style.animationDuration=
+(Math.random()*5+5)+"s";
+
+document.body.appendChild(bubble);
+
+setTimeout(()=>{
+bubble.remove();
+},10000);
+
+}
+
+setInterval(buatBubble,800);
 </script>
 </body>
 </html>
