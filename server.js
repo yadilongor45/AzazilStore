@@ -200,7 +200,7 @@ app.get("/cek/:reffid", async (req, res) => {
           const saldoBaru = Number(user.saldo) - harga;
 
           const updateSaldo = await axios.patch(
-            `${SUPABASE_URL}/rest/v1/users?username=eq.${username}`,
+             `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
             {
               saldo: saldoBaru
             },
