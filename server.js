@@ -82,11 +82,27 @@ app.post("/beli", async (req, res) => {
 
     const teks = JSON.stringify(dataKhfy).toLowerCase();
 
-    const reffid =
-      dataKhfy.data?.reffid ||
-      dataKhfy.reffid ||
-      dataKhfy.refid ||
-      "-";
+    let reffid =
+  dataKhfy.data?.reffid ||
+  dataKhfy.reffid ||
+  dataKhfy.refid ||
+  "-";
+
+if (
+  dataKhfy.msg &&
+  dataKhfy.msg.includes("RC=")
+) {
+
+  const match =
+    dataKhfy.msg.match(
+      /RC=([a-f0-9-]+)/i
+    );
+
+  if(match){
+    reffid = match[1];
+  }
+
+}
 
     const gagal =
       dataKhfy.ok === false ||
