@@ -82,27 +82,11 @@ app.post("/beli", async (req, res) => {
 
     const teks = JSON.stringify(dataKhfy).toLowerCase();
 
-    let reffid =
-  dataKhfy.data?.reffid ||
-  dataKhfy.reffid ||
-  dataKhfy.refid ||
-  "-";
-
-if (
-  dataKhfy.msg &&
-  dataKhfy.msg.includes("RC=")
-) {
-
-  const match =
-    dataKhfy.msg.match(
-      /RC=([a-f0-9-]+)/i
-    );
-
-  if(match){
-    reffid = match[1];
-  }
-
-}
+    const reffid =
+      dataKhfy.data?.reffid ||
+      dataKhfy.reffid ||
+      dataKhfy.refid ||
+      "-";
 
     const gagal =
       dataKhfy.ok === false ||
@@ -197,11 +181,15 @@ app.get("/cek/:reffid", async (req, res) => {
       const transaksi = transaksiRes.data[0];
 
       if (transaksi && transaksi.status !== "sukses") {
-        const username = transaksi.username;
+        const username = String(transaksi.username || "").trim();
         const harga = Number(transaksi.harga);
 
+        console.log("TRANSAKSI DITEMUKAN:", transaksi);
+        console.log("USERNAME UNTUK POTONG:", username);
+        console.log("HARGA POTONG:", harga);
+
         const userRes = await axios.get(
-          `${SUPABASE_URL}/rest/v1/users?username=eq.${username}&limit=1`,
+          `${SUPABASE_URL}/rest/v1/users?username=eq.${encodeURIComponent(username)}&limit=1`,
           {
             headers: {
               apikey: SUPABASE_KEY,
@@ -210,13 +198,42 @@ app.get("/cek/:reffid", async (req, res) => {
           }
         );
 
+        console.log("USER DITEMUKAN:", userRes.data);
+
         const user = userRes.data[0];
 
-        if (user) {
-          const saldoBaru = Number(user.saldo) - harga;
+        if (!user) {
+          console.log("USER TIDAK KETEMU, SALDO TIDAK DIPOTONG");
+          return res.json(cek.data);
+        }
 
-          const updateSaldo = await axios.patch(
-             `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
+        const saldoBaru = Number(user.saldo) - harga;
+
+        console.log("SALDO LAMA:", user.saldo);
+        console.log("SALDO BARU:", saldoBaru);
+
+        let updateSaldo = await axios.patch(
+          `${SUPABASE_URL}/rest/v1/users?username=eq.${encodeURIComponent(username)}`,
+          {
+            saldo: saldoBaru
+          },
+          {
+            headers: {
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`,
+              "Content-Type": "application/json",
+              Prefer: "return=representation"
+            }
+          }
+        );
+
+        console.log("SALDO DIPOTONG USERNAME:", updateSaldo.data);
+
+        if (!updateSaldo.data || updateSaldo.data.length === 0) {
+          console.log("COBA POTONG PAKAI ID:", user.id);
+
+          updateSaldo = await axios.patch(
+            `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
             {
               saldo: saldoBaru
             },
@@ -230,8 +247,10 @@ app.get("/cek/:reffid", async (req, res) => {
             }
           );
 
-          console.log("SALDO DIPOTONG:", updateSaldo.data);
+          console.log("SALDO DIPOTONG ID:", updateSaldo.data);
+        }
 
+        if (updateSaldo.data && updateSaldo.data.length > 0) {
           await axios.patch(
             `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}`,
             {
@@ -248,6 +267,10 @@ app.get("/cek/:reffid", async (req, res) => {
 
           cek.data.saldo_baru = saldoBaru;
           cek.data.saldo_dipotong = true;
+
+          console.log("TRANSAKSI DIUPDATE SUKSES, SALDO AMAN");
+        } else {
+          console.log("GAGAL POTONG SALDO, TRANSAKSI TIDAK DIUBAH JADI SUKSES");
         }
       }
     }
