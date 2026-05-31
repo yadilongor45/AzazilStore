@@ -127,7 +127,6 @@ if (sukses) {
   }
 }
 
-    let saldoBaru = Number(user.saldo);
 
     await axios.post(
   `${SUPABASE_URL}/rest/v1/transaksi`,
