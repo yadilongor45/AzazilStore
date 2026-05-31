@@ -343,7 +343,20 @@ AREA 4 : 123 GB</pre>
     <div class="card">
       <h2>Login 🔐</h2>
       <input id="loginuser" placeholder="Username">
-      <input id="loginpass" type="password" placeholder="Password">
+      <div style="position:relative;">
+  <input id="loginpass" type="password" placeholder="Password">
+  <span
+    onclick="toggleLoginPass()"
+    style="
+      position:absolute;
+      right:15px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      user-select:none;
+    "
+  >👁️</span>
+</div>
       <button onclick="login()">Login</button>
       <p id="loginhasil"></p>
     </div>
@@ -351,7 +364,20 @@ AREA 4 : 123 GB</pre>
     <div class="card">
       <h2>Daftar Akun 👤</h2>
       <input id="user" placeholder="Username">
-      <input id="pass" type="password" placeholder="Password">
+      <div style="position:relative;">
+  <input id="pass" type="password" placeholder="Password">
+  <span
+    onclick="toggleDaftarPass()"
+    style="
+      position:absolute;
+      right:15px;
+      top:50%;
+      transform:translateY(-50%);
+      cursor:pointer;
+      user-select:none;
+    "
+  >👁️</span>
+</div>
       <button onclick="daftar()">Daftar</button>
       <p id="daftarhasil"></p>
     </div>
@@ -797,6 +823,30 @@ document.getElementById("saldoUser").innerHTML =
 "💰 Saldo: Rp" + Number(data.saldo).toLocaleString("id-ID");
 
 alert("Saldo berhasil direfresh 🔥");
+
+}
+
+function toggleLoginPass(){
+
+const input=document.getElementById("loginpass");
+
+if(input.type==="password"){
+  input.type="text";
+}else{
+  input.type="password";
+}
+
+}
+
+function toggleDaftarPass(){
+
+const input=document.getElementById("pass");
+
+if(input.type==="password"){
+  input.type="text";
+}else{
+  input.type="password";
+}
 
 }
 </script>
