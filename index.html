@@ -365,6 +365,9 @@ AREA 4 : 123 GB</pre>
         <span class="badge" id="namaUser">👤 -</span>
         <span class="badge" id="saldoUser">💰 Saldo: Rp0</span>
       </div>
+      <button onclick="refreshSaldo()" style="margin-top:10px;">
+🔄 Refresh Saldo
+</button>
 
       <h3 class="section-title" onclick="toggleRiwayat()">
         📜 Riwayat Transaksi <span id="panah">▶</span>
@@ -766,6 +769,32 @@ bubble.remove();
 }
 
 setInterval(buatBubble,800);
+
+async function refreshSaldo(){
+
+const username = localStorage.getItem("username");
+
+if(!username){
+alert("Login dulu bro 😭");
+return;
+}
+
+const response = await fetch("/saldo/" + encodeURIComponent(username));
+const data = await response.json();
+
+if(!data.sukses){
+alert(data.pesan || "Gagal refresh saldo");
+return;
+}
+
+localStorage.setItem("saldo", data.saldo);
+
+document.getElementById("saldoUser").innerHTML =
+"💰 Saldo: Rp" + Number(data.saldo).toLocaleString("id-ID");
+
+alert("Saldo berhasil direfresh 🔥");
+
+}
 </script>
 </body>
 </html>

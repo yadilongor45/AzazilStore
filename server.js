@@ -493,6 +493,43 @@ app.get("/cekstok", async (req, res) => {
     });
   }
 });
+app.get("/saldo/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+
+    const response = await axios.get(
+      `${SUPABASE_URL}/rest/v1/users?username=eq.${encodeURIComponent(username)}&limit=1`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
+
+    const user = response.data[0];
+
+    if (!user) {
+      return res.json({
+        sukses: false,
+        pesan: "User tidak ditemukan"
+      });
+    }
+
+    return res.json({
+      sukses: true,
+      saldo: user.saldo
+    });
+
+  } catch (err) {
+    console.log("ERROR REFRESH SALDO:", err.response?.data || err.message);
+
+    return res.json({
+      sukses: false,
+      pesan: "Gagal refresh saldo"
+    });
+  }
+});
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
