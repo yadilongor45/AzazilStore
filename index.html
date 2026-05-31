@@ -472,6 +472,12 @@ async function beli(){
   });
 
   const data=await response.json();
+  if(data.data?.saldo !== undefined){
+  localStorage.setItem("saldo", data.data.saldo);
+
+  document.getElementById("saldoUser").innerHTML =
+  "💰 Saldo: Rp" + Number(data.data.saldo).toLocaleString("id-ID");
+}
 
   console.log("RESPON BACKEND:",data);
 

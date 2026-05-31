@@ -97,6 +97,35 @@ app.post("/beli", async (req, res) => {
       teks.includes("error");
 
     const sukses = dataKhfy.ok === true && !gagal;
+    let saldoBaru = Number(user.saldo);
+
+if (sukses) {
+  saldoBaru = Number(user.saldo) - Number(harga);
+
+  const updateSaldo = await axios.patch(
+    `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
+    {
+      saldo: saldoBaru
+    },
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: `Bearer ${SUPABASE_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      }
+    }
+  );
+
+  console.log("SALDO DIPOTONG SAAT BELI:", updateSaldo.data);
+
+  if (!updateSaldo.data || updateSaldo.data.length === 0) {
+    return res.json({
+      sukses: false,
+      pesan: "❌ Gagal memotong saldo, coba lagi"
+    });
+  }
+}
 
     let saldoBaru = Number(user.saldo);
 
@@ -107,7 +136,7 @@ app.post("/beli", async (req, res) => {
     nomor,
     paket,
     harga,
-    status: gagal ? "gagal" : "pending",
+    status: sukses ? "pending_dipotong" : "gagal",
     reffid
   },
   {
@@ -134,8 +163,9 @@ return res.json({
 📦 Paket: ${paket}
 📊 Status: PENDING`,
   data: {
-    reffid
-  }
+  reffid,
+  saldo: saldoBaru
+}
 });
 
 } catch (err) {
@@ -167,26 +197,48 @@ app.get("/cek/:reffid", async (req, res) => {
 
     const statusKhfy = String(trxKhfy.status_text || "").toUpperCase();
 
-    if (statusKhfy === "SUKSES") {
-      const transaksiRes = await axios.get(
-        `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}&limit=1`,
-        {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: `Bearer ${SUPABASE_KEY}`
-          }
+    const transaksiRes = await axios.get(
+      `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}&limit=1`,
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`
         }
-      );
+      }
+    );
 
-      const transaksi = transaksiRes.data[0];
+    const transaksi = transaksiRes.data[0];
 
-      if (transaksi && transaksi.status !== "sukses") {
+    console.log("TRANSAKSI CEK:", transaksi);
+
+    if (!transaksi) {
+      return res.json(cek.data);
+    }
+
+    if (statusKhfy === "SUKSES") {
+      if (transaksi.status !== "sukses") {
+        await axios.patch(
+          `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}`,
+          {
+            status: "sukses"
+          },
+          {
+            headers: {
+              apikey: SUPABASE_KEY,
+              Authorization: `Bearer ${SUPABASE_KEY}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+
+        console.log("TRANSAKSI SUKSES, SALDO SUDAH DIPOTONG SAAT BELI");
+      }
+    }
+
+    if (statusKhfy === "GAGAL") {
+      if (transaksi.status === "pending_dipotong") {
         const username = String(transaksi.username || "").trim();
         const harga = Number(transaksi.harga);
-
-        console.log("TRANSAKSI DITEMUKAN:", transaksi);
-        console.log("USERNAME UNTUK POTONG:", username);
-        console.log("HARGA POTONG:", harga);
 
         const userRes = await axios.get(
           `${SUPABASE_URL}/rest/v1/users?username=eq.${encodeURIComponent(username)}&limit=1`,
@@ -198,44 +250,15 @@ app.get("/cek/:reffid", async (req, res) => {
           }
         );
 
-        console.log("USER DITEMUKAN:", userRes.data);
-
         const user = userRes.data[0];
 
-        if (!user) {
-          console.log("USER TIDAK KETEMU, SALDO TIDAK DIPOTONG");
-          return res.json(cek.data);
-        }
+        if (user) {
+          const saldoRefund = Number(user.saldo) + harga;
 
-        const saldoBaru = Number(user.saldo) - harga;
-
-        console.log("SALDO LAMA:", user.saldo);
-        console.log("SALDO BARU:", saldoBaru);
-
-        let updateSaldo = await axios.patch(
-          `${SUPABASE_URL}/rest/v1/users?username=eq.${encodeURIComponent(username)}`,
-          {
-            saldo: saldoBaru
-          },
-          {
-            headers: {
-              apikey: SUPABASE_KEY,
-              Authorization: `Bearer ${SUPABASE_KEY}`,
-              "Content-Type": "application/json",
-              Prefer: "return=representation"
-            }
-          }
-        );
-
-        console.log("SALDO DIPOTONG USERNAME:", updateSaldo.data);
-
-        if (!updateSaldo.data || updateSaldo.data.length === 0) {
-          console.log("COBA POTONG PAKAI ID:", user.id);
-
-          updateSaldo = await axios.patch(
+          const refundSaldo = await axios.patch(
             `${SUPABASE_URL}/rest/v1/users?id=eq.${user.id}`,
             {
-              saldo: saldoBaru
+              saldo: saldoRefund
             },
             {
               headers: {
@@ -247,35 +270,13 @@ app.get("/cek/:reffid", async (req, res) => {
             }
           );
 
-          console.log("SALDO DIPOTONG ID:", updateSaldo.data);
-        }
+          console.log("SALDO DIREFUND:", refundSaldo.data);
 
-        if (updateSaldo.data && updateSaldo.data.length > 0) {
-          await axios.patch(
-            `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}`,
-            {
-              status: "sukses"
-            },
-            {
-              headers: {
-                apikey: SUPABASE_KEY,
-                Authorization: `Bearer ${SUPABASE_KEY}`,
-                "Content-Type": "application/json"
-              }
-            }
-          );
-
-          cek.data.saldo_baru = saldoBaru;
-          cek.data.saldo_dipotong = true;
-
-          console.log("TRANSAKSI DIUPDATE SUKSES, SALDO AMAN");
-        } else {
-          console.log("GAGAL POTONG SALDO, TRANSAKSI TIDAK DIUBAH JADI SUKSES");
+          cek.data.saldo_refund = true;
+          cek.data.saldo_baru = saldoRefund;
         }
       }
-    }
 
-    if (statusKhfy === "GAGAL") {
       await axios.patch(
         `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}`,
         {
