@@ -78,23 +78,31 @@ app.post("/beli", async (req, res) => {
     );
 
     const dataKhfy = response.data;
-    console.log("RESPON KHFY:", dataKhfy);
+console.log("RESPON KHFY:", dataKhfy);
 
-    const teks = JSON.stringify(dataKhfy).toLowerCase();
+const teks = JSON.stringify(dataKhfy).toLowerCase();
 
-    const reffid =
-      dataKhfy.data?.reffid ||
-      dataKhfy.reffid ||
-      dataKhfy.refid ||
-      "-";
+let reffid =
+  dataKhfy.data?.reffid ||
+  dataKhfy.reffid ||
+  dataKhfy.refid ||
+  "-";
 
-    const gagal =
-      dataKhfy.ok === false ||
-      teks.includes("saldo tidak mencukupi") ||
-      teks.includes("stok kosong") ||
-      teks.includes("produk salah") ||
-      teks.includes("gagal") ||
-      teks.includes("error");
+if (dataKhfy.msg && dataKhfy.msg.includes("RC=")) {
+  const match = dataKhfy.msg.match(/RC=([a-f0-9-]+)/i);
+
+  if (match) {
+    reffid = match[1];
+  }
+}
+
+const gagal =
+  dataKhfy.ok === false ||
+  teks.includes("saldo tidak mencukupi") ||
+  teks.includes("stok kosong") ||
+  teks.includes("produk salah") ||
+  teks.includes("gagal") ||
+  teks.includes("error");
 
     const sukses = dataKhfy.ok === true && !gagal;
     let saldoBaru = Number(user.saldo);
@@ -131,8 +139,7 @@ if (sukses) {
     await axios.post(
   `${SUPABASE_URL}/rest/v1/transaksi`,
   {
-    username,
-    nomor,
+    
     paket,
     harga,
     status: sukses ? "pending_dipotong" : "gagal",
