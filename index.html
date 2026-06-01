@@ -68,6 +68,7 @@ body{
 
 .card{
   background:rgba(18,18,26,.92);
+  backdrop-filter:blur(12px);
   border:1px solid #333;
   border-radius:18px;
   padding:16px;
@@ -154,27 +155,34 @@ opacity:0;
 .form-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:14px;
+  gap:20px;
+  max-width:800px;
+  margin:auto;
 }
 
-input, select, button{
+button{
   width:100%;
   padding:13px 14px;
   margin-top:10px;
+  border:none;
   border-radius:13px;
-  border:1px solid var(--line);
-  outline:none;
-  font-size:15px;
+  cursor:pointer;
+  font-weight:700;
+  color:white !important;
+  background:linear-gradient(135deg,#2563eb,#06b6d4) !important;
+  transition:.18s;
 }
 
 input, select{
+  transition:.2s;
   background:#0c0c12;
   color:var(--text);
 }
 
 input:focus, select:focus{
   border-color:var(--primary);
-  box-shadow:0 0 0 3px rgba(255,122,24,.15);
+  box-shadow:
+0 0 10px rgba(37,99,235,.4);
 }
 
 button{
@@ -202,11 +210,13 @@ button:hover{
 }
 
 .btn-secondary{
-  background:#1e293b;
+  background:#1e293b !important;
+  color:white !important;
 }
 
 .btn-danger{
-  background:linear-gradient(135deg,#ef4444,#fb7185);
+  background:linear-gradient(135deg,#ef4444,#fb7185) !important;
+  color:white !important;
 }
 
 .info-row{
@@ -351,7 +361,10 @@ AREA 4 : 123 GB</pre>
 
   <div class="form-grid" id="loginbox">
     <div class="card">
-      <h2>Login 🔐</h2>
+      <h2>🔐 Masuk ke Azazil Store</h2>
+<p style="color:#94a3b8;margin-bottom:10px;">
+Silakan login untuk membeli paket.
+</p>
       <input id="loginuser" placeholder="Username">
       <div style="position:relative;">
   <input id="loginpass" type="password" placeholder="Password">
@@ -372,7 +385,10 @@ AREA 4 : 123 GB</pre>
     </div>
 
     <div class="card">
-      <h2>Daftar Akun 👤</h2>
+      <h2>🚀 Buat Akun Baru</h2>
+<p style="color:#94a3b8;margin-bottom:10px;">
+Daftar gratis dan mulai topup.
+</p>
       <input id="user" placeholder="Username">
       <div style="position:relative;">
   <input id="pass" type="password" placeholder="Password">
@@ -464,6 +480,8 @@ window.onload=function(){
 
     document.getElementById("loginbox").style.display="none";
     document.getElementById("menuUser").style.display="block";
+    document.getElementById("kontenMember").style.display="grid";
+    document.getElementById("beliBox").style.display="block";
     document.getElementById("kontenMember").style.display="grid";
     document.getElementById("beliBox").style.display="block";
 
