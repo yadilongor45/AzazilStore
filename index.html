@@ -639,8 +639,9 @@ async function beli(){
   }
 
   hasil.innerHTML=
-    data.pesan+
-    "<br>ID: "+idtrxTerakhir;
+  data.pesan+
+  "<br>ID: "+idtrxTerakhir+
+  `<br><button class="btn-secondary" onclick="copyIdTransaksi()">📋 Copy ID Transaksi</button>`;
 
   ambilRiwayat();
 }
@@ -1077,6 +1078,19 @@ box.innerHTML=`
 }
 
 tampilkanDetailPaket();
+
+function copyIdTransaksi(){
+
+if(!idtrxTerakhir || idtrxTerakhir=="-"){
+  alert("Belum ada ID transaksi");
+  return;
+}
+
+navigator.clipboard.writeText(idtrxTerakhir);
+
+alert("ID transaksi berhasil dicopy 🔥");
+
+}
 
 </script>
 </body>
