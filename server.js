@@ -104,8 +104,9 @@ const gagal =
   teks.includes("gagal") ||
   teks.includes("error");
 
-    const sukses = dataKhfy.ok === true && !gagal;
-    let saldoBaru = Number(user.saldo);
+const sukses = dataKhfy.ok === true && !gagal;
+
+let saldoBaru = Number(user.saldo);
 
 if (sukses) {
   saldoBaru = Number(user.saldo) - Number(harga);
@@ -136,10 +137,11 @@ if (sukses) {
 }
 
 
-    await axios.post(
+    const simpanTransaksi = await axios.post(
   `${SUPABASE_URL}/rest/v1/transaksi`,
   {
-    
+    username,
+    nomor,
     paket,
     harga,
     status: sukses ? "pending_dipotong" : "gagal",
@@ -149,10 +151,13 @@ if (sukses) {
     headers: {
       apikey: SUPABASE_KEY,
       Authorization: `Bearer ${SUPABASE_KEY}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      Prefer: "return=representation"
     }
   }
 );
+
+console.log("TRANSAKSI DISIMPAN:", simpanTransaksi.data);
 
 return res.json({
   sukses,
