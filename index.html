@@ -287,10 +287,9 @@ button:hover{
 }
 
 .logo{
-  width:70px;
-  height:70px;
-
-  border-radius:50%;
+  width:72px;
+  height:72px;
+  border-radius:22px;
 
   display:flex;
   align-items:center;
@@ -298,18 +297,31 @@ button:hover{
 
   font-size:28px;
   font-weight:900;
+  letter-spacing:1px;
   color:white;
 
-  background:linear-gradient(
-    135deg,
-    #2563eb,
-    #06b6d4
-  );
+  background:
+    linear-gradient(135deg,#2563eb,#06b6d4);
 
   box-shadow:
-  0 0 20px rgba(37,99,235,.5);
+    0 0 18px rgba(37,99,235,.55),
+    inset 0 0 18px rgba(255,255,255,.12);
+
+  border:1px solid rgba(255,255,255,.18);
 
   flex-shrink:0;
+}
+
+.brand-mini{
+  display:inline-block;
+  margin-top:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(37,99,235,.16);
+  border:1px solid rgba(6,182,212,.35);
+  color:#bae6fd;
+  font-size:13px;
+  font-weight:700;
 }
 
 @media(max-width:850px){
@@ -407,7 +419,8 @@ button:hover{
 
     <div>
       <h1>Azazil Store</h1>
-      <p>Top up kuota XL / AXIS cepat, simpel, dan gak ribet.</p>
+<p>Top up kuota XL / AXIS cepat, simpel, dan gak ribet.</p>
+<span class="brand-mini">Digital Topup Service</span>
     </div>
   </div>
 
