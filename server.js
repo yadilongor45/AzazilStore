@@ -467,7 +467,7 @@ app.get("/riwayat/:username", async (req, res) => {
     const username = req.params.username;
 
     const response = await axios.get(
-      `${SUPABASE_URL}/rest/v1/transaksi?username=eq.${username}&order=id.desc`,
+      `${SUPABASE_URL}/rest/v1/transaksi?username=eq.${encodeURIComponent(username)}&order=id.desc&limit=50`,
       {
         headers: {
           apikey: SUPABASE_KEY,
@@ -477,7 +477,9 @@ app.get("/riwayat/:username", async (req, res) => {
     );
 
     return res.json(response.data);
+
   } catch (err) {
+    console.log("ERROR RIWAYAT:", err.response?.data || err.message);
     return res.json([]);
   }
 });
