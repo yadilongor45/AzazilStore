@@ -774,7 +774,20 @@ function logout(){
 localStorage.removeItem("idtrxTerakhir");
 
 function topup(){
-  alert("Untuk deposit, hubungi admin. Sekali deposit saldo tidak bisa ditarik lagi ya.");
+
+const username = localStorage.getItem("username") || "-";
+
+const pesan =
+`Halo kak, saya mau deposit saldo Azazil Store.
+Username: ${username}
+Nominal: 
+Metode pembayaran: `;
+
+const url =
+"https://wa.me/62882010059319?text=" + encodeURIComponent(pesan);
+
+window.open(url, "_blank");
+
 }
 
 async function tambahSaldo(){
