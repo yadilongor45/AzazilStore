@@ -383,6 +383,17 @@ button:hover{
   font-weight:700;
 }
 
+.note-box{
+  margin-top:12px;
+  padding:12px;
+  border-radius:14px;
+  background:rgba(250,204,21,.10);
+  border:1px solid rgba(250,204,21,.35);
+  color:#fde68a;
+  line-height:1.5;
+  font-size:14px;
+}
+
 </style>
 </head>
 
@@ -507,8 +518,12 @@ Daftar gratis dan mulai topup.
   <option>Jumbo - Rp99.000</option>
 </select>
 
-<div id="detailPaketBox" class="detail-paket-box"></div>
+<div class="note-box">
+  ⚠️ Pastikan nomor tujuan benar sebelum membeli, jika salah tanggung sendiri.<br>
+  Saldo yang sudah digunakan untuk transaksi tidak bisa dibatalkan jika pesanan sudah diproses.
+</div>
 
+<div id="detailPaketBox" class="detail-paket-box"></div>
     <button onclick="beli()">Beli Sekarang</button>
     <button class="btn-secondary" onclick="cekStatus()">Cek Status</button>
     <button class="btn-secondary" onclick="cekStok()">📦 Cek Stok Kuota</button>
