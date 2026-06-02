@@ -494,7 +494,8 @@ Daftar gratis dan mulai topup.
 
 <script>
 let sudahLogin=false;
-let idtrxTerakhir="";
+let idtrxTerakhir =
+localStorage.getItem("idtrxTerakhir") || "";
 
 if(localStorage.getItem("login")){
   sudahLogin=true;
@@ -572,6 +573,8 @@ async function beli(){
     data.reffid ||
     data.refid ||
     "-";
+
+    localStorage.setItem("idtrxTerakhir", idtrxTerakhir);
 
   if(!data.sukses){
     hasil.innerHTML=
@@ -713,6 +716,8 @@ function logout(){
   sudahLogin=false;
   location.reload();
 }
+
+localStorage.removeItem("idtrxTerakhir");
 
 function topup(){
   alert("Untuk deposit, hubungi admin. Sekali deposit saldo tidak bisa ditarik lagi ya.");
