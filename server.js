@@ -78,6 +78,8 @@ app.post("/beli", async (req, res) => {
     );
 
     const dataKhfy = response.data;
+    const trxid = dataKhfy.data?.trxid || "-";
+const kode_produk = dataKhfy.data?.produk || kodeProduk;
 console.log("RESPON KHFY:", dataKhfy);
 
 const teks = JSON.stringify(dataKhfy).toLowerCase();
@@ -145,7 +147,10 @@ if (sukses) {
     paket,
     harga,
     status: sukses ? "pending_dipotong" : "gagal",
-    reffid
+    reffid,
+    trxid,
+    kode_produk,
+    keterangan: dataKhfy.msg || "-"
   },
   {
     headers: {
@@ -207,6 +212,22 @@ app.get("/cek/:reffid", async (req, res) => {
     }
 
     const statusKhfy = String(trxKhfy.status_text || "").toUpperCase();
+    await axios.patch(
+  `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}`,
+  {
+    trxid: String(trxKhfy.kode || ""),
+    kode_produk: trxKhfy.kode_produk || "",
+    keterangan: trxKhfy.keterangan || trxKhfy.sn || "-",
+    sn: trxKhfy.sn || ""
+  },
+  {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: `Bearer ${SUPABASE_KEY}`,
+      "Content-Type": "application/json"
+    }
+  }
+);
 
     const transaksiRes = await axios.get(
       `${SUPABASE_URL}/rest/v1/transaksi?reffid=eq.${refid}&limit=1`,

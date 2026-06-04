@@ -838,14 +838,25 @@ async function ambilRiwayat(){
 
     data.forEach(item=>{
 
-      html+=`
-      <div class="item-card">
-        📦 <b>${item.paket}</b><br>
-        📱 ${item.nomor}<br>
-        💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
-        ${item.status=="sukses" ? "✅" : "❌"} ${item.status}
-      </div>
-      `;
+      const waktu = item.created_at
+  ? new Date(item.created_at).toLocaleString("id-ID", {
+      dateStyle: "medium",
+      timeStyle: "short"
+    })
+  : "-";
+
+html+=`
+<div class="item-card">
+  🆔 TrxID: <b>${item.trxid || "-"}</b><br>
+  🕒 ${waktu}<br>
+  🏷️ Kode: ${item.kode_produk || "-"}<br>
+  📱 Tujuan: ${item.nomor}<br>
+  💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
+  📊 Status: ${item.status=="sukses" ? "✅" : "❌"} ${item.status}<br>
+  📝 Keterangan: ${item.keterangan || item.sn || "-"}<br>
+  <small>RefID: ${item.reffid || "-"}</small>
+</div>
+`;
 
     });
   }
