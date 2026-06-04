@@ -527,7 +527,7 @@ Daftar gratis dan mulai topup.
   <div class="card" id="beliBox" style="display:none">
     <h2>Beli Paket 🔥</h2>
 
-    <input id="nomor" placeholder="Masukkan nomor tujuan">
+    <input id="nomor" inputmode="numeric" placeholder="Masukkan nomor tujuan">
 
     <select id="paket" onchange="tampilkanDetailPaket()">
   <option>SuperMini - Rp45.000</option>
@@ -601,9 +601,20 @@ async function beli(){
   }
 
   if(!nomor){
-    hasil.innerHTML="❌ Nomor belum diisi";
-    return;
-  }
+  hasil.innerHTML="❌ Nomor belum diisi";
+  return;
+}
+
+nomor = nomor.replace(/\D/g, "");
+
+if(nomor.startsWith("62")){
+  nomor = "0" + nomor.slice(2);
+}
+
+if(!nomor.startsWith("08") || nomor.length < 10 || nomor.length > 13){
+  hasil.innerHTML="❌ Nomor tidak valid. Gunakan format 08xxxxxxxxxx";
+  return;
+}
 
   hasil.innerHTML="⏳ Memproses pesanan...";
   btnBeli.disabled=true;
