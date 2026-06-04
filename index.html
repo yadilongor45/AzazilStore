@@ -881,7 +881,7 @@ html+=`
   📱 Tujuan: ${item.nomor}<br>
   💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
   📊 Status: ${item.status=="sukses" ? "✅" : "❌"} ${item.status}<br>
-  📝 Keterangan: ${item.keterangan || item.sn || "-"}<br>
+  📝 Keterangan: ${bersihkanKeterangan(item.keterangan || item.sn || "-")}<br>
   <small>RefID: ${item.reffid || "-"}</small>
 </div>
 `;
@@ -1141,6 +1141,33 @@ if(!idtrxTerakhir || idtrxTerakhir=="-"){
 navigator.clipboard.writeText(idtrxTerakhir);
 
 alert("ID transaksi berhasil dicopy 🔥");
+
+}
+
+function bersihkanKeterangan(teks){
+
+if(!teks){
+  return "-";
+}
+
+teks = String(teks);
+
+// sensor data sensitif
+teks = teks.replace(/password=([^&\s]+)/gi, "password=***");
+teks = teks.replace(/pin=([^&\s]+)/gi, "pin=***");
+teks = teks.replace(/kodereseller=([^&\s]+)/gi, "kodereseller=***");
+
+// kalau ada format URL mentah trx?... ambil bagian setelah # saja
+if(teks.includes("#")){
+  teks = teks.split("#").pop().trim();
+}
+
+// kalau masih ada kata trx? buang total
+if(teks.toLowerCase().includes("trx?")){
+  return "Transaksi gagal / provider gangguan";
+}
+
+return teks;
 
 }
 

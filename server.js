@@ -194,6 +194,30 @@ return res.json({
 }
 });
 
+function bersihkanKeteranganKhfy(teks){
+
+if(!teks){
+  return "-";
+}
+
+teks = String(teks);
+
+teks = teks.replace(/password=([^&\s]+)/gi, "password=***");
+teks = teks.replace(/pin=([^&\s]+)/gi, "pin=***");
+teks = teks.replace(/kodereseller=([^&\s]+)/gi, "kodereseller=***");
+
+if(teks.includes("#")){
+  teks = teks.split("#").pop().trim();
+}
+
+if(teks.toLowerCase().includes("trx?")){
+  return "Transaksi gagal / provider gangguan";
+}
+
+return teks;
+
+}
+
 app.get("/cek/:reffid", async (req, res) => {
   try {
     const refid = req.params.reffid;
@@ -217,7 +241,7 @@ app.get("/cek/:reffid", async (req, res) => {
   {
     trxid: String(trxKhfy.kode || ""),
     kode_produk: trxKhfy.kode_produk || "",
-    keterangan: trxKhfy.keterangan || trxKhfy.sn || "-",
+    keterangan: bersihkanKeteranganKhfy(trxKhfy.keterangan || trxKhfy.sn || "-"),
     sn: trxKhfy.sn || ""
   },
   {
