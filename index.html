@@ -160,6 +160,7 @@ opacity:0;
   margin:auto;
 }
 
+
 button{
   width:100%;
   padding:13px 14px;
@@ -171,6 +172,12 @@ button{
   color:white !important;
   background:linear-gradient(135deg,#2563eb,#06b6d4) !important;
   transition:.18s;
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+  transform:none;
 }
 
 input, select{
@@ -537,7 +544,7 @@ Daftar gratis dan mulai topup.
 </div>
 
 <div id="detailPaketBox" class="detail-paket-box"></div>
-    <button onclick="beli()">Beli Sekarang</button>
+    <button id="btnBeli" onclick="beli()">Beli Sekarang</button>
     <button class="btn-secondary" onclick="cekStatus()">Cek Status</button>
     <button class="btn-secondary" onclick="cekStok()">📦 Cek Stok Kuota</button>
 
@@ -586,6 +593,7 @@ async function beli(){
   let nomor=document.getElementById("nomor").value;
   let paket=document.getElementById("paket").value;
   let hasil=document.getElementById("hasil");
+  let btnBeli=document.getElementById("btnBeli");
 
   if(!sudahLogin){
     hasil.innerHTML="❌ Login dulu sebelum order";
@@ -598,6 +606,8 @@ async function beli(){
   }
 
   hasil.innerHTML="⏳ Memproses pesanan...";
+  btnBeli.disabled=true;
+btnBeli.innerText="⏳ Memproses...";
 
   const response=await fetch("/beli",{
     method:"POST",
@@ -631,19 +641,26 @@ async function beli(){
     localStorage.setItem("idtrxTerakhir", idtrxTerakhir);
 
   if(!data.sukses){
-    hasil.innerHTML=
-      "❌ "+data.pesan+
-      (idtrxTerakhir!="-" ? "<br>ID: "+idtrxTerakhir : "");
-    ambilRiwayat();
-    return;
-  }
+  hasil.innerHTML=
+    "❌ "+data.pesan+
+    (idtrxTerakhir!="-" ? "<br>ID: "+idtrxTerakhir : "");
+
+  btnBeli.disabled=false;
+  btnBeli.innerText="Beli Sekarang";
+
+  ambilRiwayat();
+  return;
+}
 
   hasil.innerHTML=
   data.pesan+
   "<br>ID: "+idtrxTerakhir+
   `<br><button class="btn-secondary" onclick="copyIdTransaksi()">📋 Copy ID Transaksi</button>`;
 
-  ambilRiwayat();
+btnBeli.disabled=false;
+btnBeli.innerText="Beli Sekarang";
+
+ambilRiwayat();
 }
 
 async function cekStatus(){
