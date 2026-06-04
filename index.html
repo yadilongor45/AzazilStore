@@ -894,35 +894,47 @@ html+=`
 
 async function cekStok(){
 
-  let stokhasil=document.getElementById("stokhasil");
+let stokhasil=document.getElementById("stokhasil");
 
-  stokhasil.innerHTML="⏳ Mengecek stok...";
+if(stokhasil.innerHTML.trim() !== ""){
+  stokhasil.innerHTML="";
+  return;
+}
 
-  const response=await fetch("/cekstok");
-  const data=await response.json();
+stokhasil.innerHTML="⏳ Mengecek stok...";
 
-  if(!data.sukses){
-    stokhasil.innerHTML="❌ Gagal cek stok";
-    return;
-  }
+const response=await fetch("/cekstok");
+const data=await response.json();
 
-  let html="";
+if(!data.sukses){
+  stokhasil.innerHTML="❌ Gagal cek stok";
+  return;
+}
 
-  data.data.data.forEach(item=>{
+let html="";
 
-    html+=`
-    <div class="item-card">
-      📦 <b>${item.nama}</b><br>
-      🏷️ ${item.type}<br>
-      ${item.sisa_slot > 0
-        ? "🟢 Tersedia: "+item.sisa_slot
-        : "🔴 Stok Habis"}
-    </div>
-    `;
+data.data.data.forEach(item=>{
 
-  });
+html+=`
+<div class="item-card">
+  📦 <b>${item.nama}</b><br>
+  🏷️ ${item.type}<br>
+  ${item.sisa_slot > 0
+    ? "🟢 Tersedia: "+item.sisa_slot
+    : "🔴 Stok Habis"}
+</div>
+`;
 
-  stokhasil.innerHTML=html;
+});
+
+html += `
+<button class="btn-secondary" onclick="tutupStok()">
+Tutup Stok
+</button>
+`;
+
+stokhasil.innerHTML=html;
+
 }
 
 function toggleRiwayat(){
@@ -1169,6 +1181,10 @@ if(teks.toLowerCase().includes("trx?")){
 
 return teks;
 
+}
+
+function tutupStok(){
+  document.getElementById("stokhasil").innerHTML="";
 }
 
 </script>
