@@ -575,7 +575,7 @@ Daftar gratis dan mulai topup.
 📍 Cek Area XL / AXIS
 </button>
     <button id="btnBeli" onclick="beli()">Beli Sekarang</button>
-    <button class="btn-secondary" onclick="cekStatus()">Cek Status</button>
+    <button id="btnCekStatus" class="btn-secondary" onclick="cekStatus()">Cek Status</button>
     <button class="btn-secondary" onclick="cekStok()">📦 Cek Stok Kuota</button>
 
     <div id="stokhasil"></div>
@@ -707,38 +707,56 @@ ambilRiwayat();
 async function cekStatus(){
 
   let hasil=document.getElementById("hasil");
+  let btnCekStatus=document.getElementById("btnCekStatus");
 
   if(!idtrxTerakhir || idtrxTerakhir=="-"){
     hasil.innerHTML+="<br>❌ Belum ada ID transaksi";
     return;
   }
 
+  btnCekStatus.disabled=true;
+  btnCekStatus.innerText="⏳ Mengecek...";
   hasil.innerHTML+="<br>⏳ Mengecek status...";
 
-  const response=await fetch("/cek/"+idtrxTerakhir);
-  const data=await response.json();
+  try{
 
-  console.log("STATUS:",data);
+    const response=await fetch("/cek/"+idtrxTerakhir);
+    const data=await response.json();
 
-  if(!data.data || data.data.length === 0){
+    console.log("STATUS:",data);
+
+    if(!data.data || data.data.length === 0){
+
+      hasil.innerHTML += `
+      <br><br>📦 Status Pesanan
+      <br>📊 Status: MASIH DIPROSES ⏳
+      `;
+
+    } else {
+
+      const trx = data.data[0];
+
+      hasil.innerHTML += `
+      <br><br>📦 Status Pesanan
+      <br>🆔 ID: ${trx.kode}
+      <br>📱 Tujuan: ${trx.tujuan}
+      <br>📦 Produk: ${trx.kode_produk}
+      <br>📊 Status: ${trx.status_text}
+      <br>📝 Keterangan: ${trx.keterangan || trx.sn || "-"}
+      `;
+
+    }
+
+  }catch(err){
 
     hasil.innerHTML += `
-    <br><br>📦 Status Pesanan
-    <br>📊 Status: MASIH DIPROSES ⏳
+    <br>❌ Gagal cek status, coba lagi.
     `;
 
-  } else {
+  }finally{
 
-    const trx = data.data[0];
-
-    hasil.innerHTML += `
-    <br><br>📦 Status Pesanan
-    <br>🆔 ID: ${trx.kode}
-    <br>📱 Tujuan: ${trx.tujuan}
-    <br>📦 Produk: ${trx.kode_produk}
-    <br>📊 Status: ${trx.status_text}
-<br>📝 Keterangan: ${trx.keterangan || trx.sn || "-"}
-    `;
+    btnCekStatus.disabled=false;
+    btnCekStatus.innerText="Cek Status";
 
   }
 }
