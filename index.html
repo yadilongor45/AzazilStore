@@ -413,6 +413,33 @@ button:hover{
   font-size:14px;
 }
 
+.status-badge{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+  margin-top:4px;
+}
+
+.status-sukses{
+  background:rgba(34,197,94,.15);
+  color:#86efac;
+  border:1px solid rgba(34,197,94,.35);
+}
+
+.status-pending{
+  background:rgba(250,204,21,.15);
+  color:#fde68a;
+  border:1px solid rgba(250,204,21,.35);
+}
+
+.status-gagal{
+  background:rgba(239,68,68,.15);
+  color:#fca5a5;
+  border:1px solid rgba(239,68,68,.35);
+}
+
 </style>
 </head>
 
@@ -873,6 +900,22 @@ async function ambilRiwayat(){
     })
   : "-";
 
+const statusText = String(item.status || "").toLowerCase();
+
+let statusBadge = `<span class="status-badge status-pending">🟡 PENDING</span>`;
+
+if(statusText === "sukses"){
+  statusBadge = `<span class="status-badge status-sukses">🟢 SUKSES</span>`;
+}
+
+if(statusText === "gagal"){
+  statusBadge = `<span class="status-badge status-gagal">🔴 GAGAL</span>`;
+}
+
+if(statusText === "pending_dipotong"){
+  statusBadge = `<span class="status-badge status-pending">🟡 PENDING</span>`;
+}
+
 html+=`
 <div class="item-card">
   🆔 TrxID: <b>${item.trxid || "-"}</b><br>
@@ -880,7 +923,7 @@ html+=`
   🏷️ Kode: ${item.kode_produk || "-"}<br>
   📱 Tujuan: ${item.nomor}<br>
   💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
-  📊 Status: ${item.status=="sukses" ? "✅" : "❌"} ${item.status}<br>
+  📊 Status: ${statusBadge}<br>
   📝 Keterangan: ${bersihkanKeterangan(item.keterangan || item.sn || "-")}<br>
   <small>RefID: ${item.reffid || "-"}</small>
 </div>
