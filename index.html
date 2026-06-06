@@ -925,7 +925,17 @@ html+=`
   💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
   📊 Status: ${statusBadge}<br>
   📝 Keterangan: ${bersihkanKeterangan(item.keterangan || item.sn || "-")}<br>
-  <small>RefID: ${item.reffid || "-"}</small>
+  <small>RefID: ${item.reffid || "-"}</small><br>
+
+<button class="btn-secondary" onclick="hubungiAdminTransaksi(
+'${item.trxid || "-"}',
+'${item.reffid || "-"}',
+'${item.nomor || "-"}',
+'${item.paket || "-"}',
+'${item.status || "-"}'
+)">
+💬 Hubungi Admin
+</button>
 </div>
 `;
 
@@ -1228,6 +1238,27 @@ return teks;
 
 function tutupStok(){
   document.getElementById("stokhasil").innerHTML="";
+}
+
+function hubungiAdminTransaksi(trxid, reffid, nomor, paket, status){
+
+const username = localStorage.getItem("username") || "-";
+
+const pesan =
+`Halo kak, saya mau tanya transaksi Azazil Store.
+
+Username: ${username}
+TrxID: ${trxid}
+RefID: ${reffid}
+Nomor: ${nomor}
+Paket: ${paket}
+Status: ${status}`;
+
+const url =
+"https://wa.me/62882010059319?text=" + encodeURIComponent(pesan);
+
+window.open(url, "_blank");
+
 }
 
 </script>
