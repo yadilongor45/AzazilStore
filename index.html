@@ -702,6 +702,7 @@ btnBeli.disabled=false;
 btnBeli.innerText="Beli Sekarang";
 
 ambilRiwayat();
+autoCekStatusSetelahBeli();
 }
 
 async function cekStatus(){
@@ -902,7 +903,23 @@ async function ambilRiwayat(){
   const username=localStorage.getItem("username");
 
   const response=await fetch("/riwayat/"+username);
-  const data=await response.json();
+  let data = await response.json();
+
+  const pendingList = data.filter(item =>
+  item.status === "pending_dipotong" ||
+  item.status === "pending"
+);
+
+for(const trx of pendingList){
+  if(trx.reffid){
+    await fetch("/cek/" + trx.reffid);
+  }
+}
+
+if(pendingList.length > 0){
+  const responseBaru = await fetch("/riwayat/" + username);
+  data = await responseBaru.json();
+}
 
   let html="";
 
@@ -1286,6 +1303,30 @@ function cekAreaXL(){
   window.open("https://xl.kavion.eu.cc/", "_blank");
 }
 
+function autoCekStatusSetelahBeli(){
+
+let jumlahCek = 0;
+
+const interval = setInterval(async()=>{
+
+  jumlahCek++;
+
+  if(!idtrxTerakhir || idtrxTerakhir === "-"){
+    clearInterval(interval);
+    return;
+  }
+
+  await cekStatus();
+  await ambilRiwayat();
+  await refreshSaldo();
+
+  if(jumlahCek >= 6){
+    clearInterval(interval);
+  }
+
+}, 10000);
+
+}
 </script>
 </body>
 </html>
