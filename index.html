@@ -84,37 +84,11 @@ body{
 }
 
 @keyframes rgbGlow{
-
-0%{
-box-shadow:
-0 0 10px #ff0000,
-0 0 20px #ff0000;
-}
-
-25%{
-box-shadow:
-0 0 10px #00ff00,
-0 0 20px #00ff00;
-}
-
-50%{
-box-shadow:
-0 0 10px #00ffff,
-0 0 20px #00ffff;
-}
-
-75%{
-box-shadow:
-0 0 10px #ff00ff,
-0 0 20px #ff00ff;
-}
-
-100%{
-box-shadow:
-0 0 10px #ff0000,
-0 0 20px #ff0000;
-}
-
+0%{box-shadow:0 0 10px #ff0000,0 0 20px #ff0000;}
+25%{box-shadow:0 0 10px #00ff00,0 0 20px #00ff00;}
+50%{box-shadow:0 0 10px #00ffff,0 0 20px #00ffff;}
+75%{box-shadow:0 0 10px #ff00ff,0 0 20px #ff00ff;}
+100%{box-shadow:0 0 10px #ff0000,0 0 20px #ff0000;}
 }
 
 .bubble{
@@ -129,12 +103,7 @@ z-index:0;
 }
 
 @keyframes naik{
-
-to{
-transform:translateY(-120vh);
-opacity:0;
-}
-
+to{transform:translateY(-120vh);opacity:0;}
 }
 
 .card h2{
@@ -160,7 +129,6 @@ opacity:0;
   margin:auto;
 }
 
-
 button{
   width:100%;
   padding:13px 14px;
@@ -181,6 +149,11 @@ button:disabled{
 }
 
 input, select{
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
   transition:.2s;
   background:#0c0c12;
   color:var(--text);
@@ -188,32 +161,14 @@ input, select{
 
 input:focus, select:focus{
   border-color:var(--primary);
-  box-shadow:
-0 0 10px rgba(37,99,235,.4);
-}
-
-button{
-  border:none;
-  cursor:pointer;
-  font-weight:700;
-  color:white;
-
-  background:linear-gradient(
-    135deg,
-    #2563eb,
-    #06b6d4
-  );
-
-  transition:.18s;
+  outline: none;
+  box-shadow:0 0 10px rgba(37,99,235,.4);
 }
 
 button:hover{
   transform:translateY(-2px);
   filter:brightness(1.1);
-
-  box-shadow:
-  0 0 15px rgba(37,99,235,.5),
-  0 0 30px rgba(6,182,212,.3);
+  box-shadow:0 0 15px rgba(37,99,235,.5),0 0 30px rgba(6,182,212,.3);
 }
 
 .btn-secondary{
@@ -234,28 +189,23 @@ button:hover{
 }
 
 .badge{
-  .harga-badge{
-  display:inline-block;
-  margin-bottom:10px;
-  padding:6px 12px;
-  border-radius:999px;
-
-  background:linear-gradient(
-    135deg,
-    #2563eb,
-    #06b6d4
-  );
-
-  color:white;
-  font-weight:700;
-  font-size:14px;
-}
   display:inline-block;
   padding:7px 10px;
   border-radius:999px;
   background:#20202d;
   color:#e8eaf2;
   border:1px solid var(--line);
+  font-size:14px;
+}
+
+.harga-badge{
+  display:inline-block;
+  margin-bottom:10px;
+  padding:6px 12px;
+  border-radius:999px;
+  background:linear-gradient(135deg,#2563eb,#06b6d4);
+  color:white;
+  font-weight:700;
   font-size:14px;
 }
 
@@ -297,25 +247,16 @@ button:hover{
   width:72px;
   height:72px;
   border-radius:22px;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   font-size:28px;
   font-weight:900;
   letter-spacing:1px;
   color:white;
-
-  background:
-    linear-gradient(135deg,#2563eb,#06b6d4);
-
-  box-shadow:
-    0 0 18px rgba(37,99,235,.55),
-    inset 0 0 18px rgba(255,255,255,.12);
-
+  background:linear-gradient(135deg,#2563eb,#06b6d4);
+  box-shadow:0 0 18px rgba(37,99,235,.55),inset 0 0 18px rgba(255,255,255,.12);
   border:1px solid rgba(255,255,255,.18);
-
   flex-shrink:0;
 }
 
@@ -332,38 +273,18 @@ button:hover{
 }
 
 @media(max-width:850px){
-  .grid, .form-grid{
-    grid-template-columns:1fr;
-  }
-
-  .hero h1{
-    font-size:30px;
-  }
+  .grid, .form-grid{ grid-template-columns:1fr; }
+  .hero h1{ font-size:30px; }
 }
 
 @media(max-width:520px){
-  body{
-    padding:12px;
-  }
-
-  .hero{
-    padding:18px;
-  }
-
-  .card{
-    padding:14px;
-    border-radius:16px;
-  }
-
-  input, select, button{
-    font-size:16px;
-    padding:14px;
-  }
+  body{ padding:12px; }
+  .hero{ padding:18px; }
+  .card{ padding:14px; border-radius:16px; }
+  input, select, button{ font-size:16px; padding:14px; }
 }
 
-.paket-card{
-  cursor:pointer;
-}
+.paket-card{ cursor:pointer; }
 
 .detail-paket{
   display:none;
@@ -447,17 +368,14 @@ button:hover{
 <div class="container">
 
   <div class="hero">
-
-  <div class="logo-wrap">
-    <div class="logo">AZ</div>
-
-    <div>
-      <h1>Azazil Store</h1>
-<p>Top up kuota XL / AXIS cepat, simpel, dan gak ribet.</p>
-<span class="brand-mini">Digital Topup Service</span>
+    <div class="logo-wrap">
+      <div class="logo">AZ</div>
+      <div>
+        <h1>Azazil Store</h1>
+        <p>Top up kuota XL / AXIS cepat, simpel, dan gak ribet.</p>
+        <span class="brand-mini">Digital Topup Service</span>
+      </div>
     </div>
-  </div>
-
     <div class="info-row">
       <span class="badge">⚡ Proses otomatis</span>
       <span class="badge">📦 Paket Akrab</span>
@@ -468,52 +386,25 @@ button:hover{
   <div class="form-grid" id="loginbox">
     <div class="card">
       <h2>🔐 Masuk ke Azazil Store</h2>
-<p style="color:#94a3b8;margin-bottom:10px;">
-Silakan login untuk membeli paket.
-</p>
+      <p style="color:#94a3b8;margin-bottom:10px;">Silakan login untuk membeli paket.</p>
       <input id="loginuser" placeholder="Username">
       <div style="position:relative;">
-  <input id="loginpass" type="password" placeholder="Password">
-  <span
-    onclick="toggleLoginPass()"
-    style="
-      position:absolute;
-      right:15px;
-      top:50%;
-      transform:translateY(-50%);
-      cursor:pointer;
-      user-select:none;
-    "
-  >👁️</span>
-</div>
+        <input id="loginpass" type="password" placeholder="Password">
+        <span onclick="toggleLoginPass()" style="position:absolute;right:15px;top:60%;transform:translateY(-50%);cursor:pointer;user-select:none;">👁️</span>
+      </div>
       <button onclick="login()">Login</button>
-      <button class="btn-secondary" onclick="bukaDaftar()">
-Belum punya akun? Daftar
-</button>
-
+      <button class="btn-secondary" onclick="bukaDaftar()">Belum punya akun? Daftar</button>
       <p id="loginhasil"></p>
     </div>
 
     <div class="card" id="daftarBox" style="display:none">
       <h2>🚀 Buat Akun Baru</h2>
-<p style="color:#94a3b8;margin-bottom:10px;">
-Daftar gratis dan mulai topup.
-</p>
+      <p style="color:#94a3b8;margin-bottom:10px;">Daftar gratis dan mulai topup.</p>
       <input id="user" placeholder="Username">
       <div style="position:relative;">
-  <input id="pass" type="password" placeholder="Password">
-  <span
-    onclick="toggleDaftarPass()"
-    style="
-      position:absolute;
-      right:15px;
-      top:50%;
-      transform:translateY(-50%);
-      cursor:pointer;
-      user-select:none;
-    "
-  >👁️</span>
-</div>
+        <input id="pass" type="password" placeholder="Password">
+        <span onclick="toggleDaftarPass()" style="position:absolute;right:15px;top:60%;transform:translateY(-50%);cursor:pointer;user-select:none;">👁️</span>
+      </div>
       <button onclick="daftar()">Daftar</button>
       <p id="daftarhasil"></p>
     </div>
@@ -522,19 +413,15 @@ Daftar gratis dan mulai topup.
   <div id="menuUser" style="display:none">
     <div class="card">
       <h2>👤 MENU USER</h2>
-
       <div class="info-row">
         <span class="badge" id="namaUser">👤 -</span>
         <span class="badge" id="saldoUser">💰 Saldo: Rp0</span>
       </div>
-      <button onclick="refreshSaldo()" style="margin-top:10px;">
-🔄 Refresh Saldo
-</button>
+      <button onclick="refreshSaldo()" style="margin-top:10px;">🔄 Refresh Saldo</button>
 
       <h3 class="section-title" onclick="toggleRiwayat()">
         📜 50 transaksi terbaru anda <span id="panah">▶</span>
       </h3>
-
       <div id="riwayat"></div>
 
       <button onclick="topup()">💰 Top Up Saldo</button>
@@ -542,8 +429,9 @@ Daftar gratis dan mulai topup.
       <div id="adminPanel" style="display:none">
         <hr style="margin:20px 0;border-color:var(--line)">
         <h2>👑 Admin Panel</h2>
-        <input id="userTopup" placeholder="Username">
-        <input id="nominalTopup" placeholder="Nominal">
+        <input id="userTopup" placeholder="Username Member">
+        <input id="nominalTopup" type="number" placeholder="Nominal Saldo">
+        <input id="secretKeyTopup" type="password" placeholder="Masukan Secret Key Admin">
         <button onclick="tambahSaldo()">Tambah Saldo 💰</button>
       </div>
 
@@ -553,27 +441,24 @@ Daftar gratis dan mulai topup.
 
   <div class="card" id="beliBox" style="display:none">
     <h2>Beli Paket 🔥</h2>
-
     <input id="nomor" inputmode="numeric" placeholder="Masukkan nomor tujuan">
 
     <select id="paket" onchange="tampilkanDetailPaket()">
-  <option>SuperMini - Rp45.000</option>
-  <option>Mini - Rp58.000</option>
-  <option>Big - Rp62.000</option>
-  <option>Jumbo V2 - Rp72.000</option>
-  <option>MegaBig - Rp97.000</option>
-  <option>Jumbo - Rp99.000</option>
-</select>
+      <option>SuperMini - Rp45.000</option>
+      <option>Mini - Rp58.000</option>
+      <option>Big - Rp62.000</option>
+      <option>Jumbo V2 - Rp72.000</option>
+      <option>MegaBig - Rp97.000</option>
+      <option>Jumbo - Rp99.000</option>
+    </select>
 
-<div class="note-box">
-  ⚠️ Pastikan nomor tujuan benar sebelum membeli, jika salah tanggung sendiri.<br>
-  Saldo yang sudah digunakan untuk transaksi tidak bisa dibatalkan jika pesanan sudah diproses.
-</div>
+    <div class="note-box">
+      ⚠️ Pastikan nomor tujuan benar sebelum membeli, jika salah tanggung sendiri.<br>
+      Saldo yang sudah digunakan untuk transaksi tidak bisa dibatalkan jika pesanan sudah diproses.
+    </div>
 
-<div id="detailPaketBox" class="detail-paket-box"></div>
-<button class="btn-secondary" onclick="cekAreaXL()">
-📍 Cek Area XL / AXIS
-</button>
+    <div id="detailPaketBox" class="detail-paket-box"></div>
+    <button class="btn-secondary" onclick="cekAreaXL()">📍 Cek Area XL / AXIS</button>
     <button id="btnBeli" onclick="beli()">Beli Sekarang</button>
     <button id="btnCekStatus" class="btn-secondary" onclick="cekStatus()">Cek Status</button>
     <button class="btn-secondary" onclick="cekStok()">📦 Cek Stok Kuota</button>
@@ -587,28 +472,23 @@ Daftar gratis dan mulai topup.
 
 <script>
 let sudahLogin=false;
-let idtrxTerakhir =
-localStorage.getItem("idtrxTerakhir") || "";
+let idtrxTerakhir = localStorage.getItem("idtrxTerakhir") || "";
 
 if(localStorage.getItem("login")){
   sudahLogin=true;
 }
 
 window.onload=function(){
-
   if(sudahLogin){
-
     document.getElementById("loginbox").style.display="none";
     document.getElementById("menuUser").style.display="block";
-    document.getElementById("beliBox").style.display="block";
     document.getElementById("beliBox").style.display="block";
 
     const username = localStorage.getItem("username") || "-";
     const saldo = localStorage.getItem("saldo") || 0;
 
     document.getElementById("namaUser").textContent="👤 "+username;
-    document.getElementById("saldoUser").innerHTML=
-      "💰 Saldo: Rp"+Number(saldo).toLocaleString("id-ID");
+    document.getElementById("saldoUser").innerHTML="💰 Saldo: Rp"+Number(saldo).toLocaleString("id-ID");
 
     ambilRiwayat();
 
@@ -619,7 +499,6 @@ window.onload=function(){
 }
 
 async function beli(){
-
   let nomor=document.getElementById("nomor").value;
   let paket=document.getElementById("paket").value;
   let hasil=document.getElementById("hasil");
@@ -631,30 +510,27 @@ async function beli(){
   }
 
   if(!nomor){
-  hasil.innerHTML="❌ Nomor belum diisi";
-  return;
-}
+    hasil.innerHTML="❌ Nomor belum diisi";
+    return;
+  }
 
-nomor = nomor.replace(/\D/g, "");
+  nomor = nomor.replace(/\D/g, "");
+  if(nomor.startsWith("62")){
+    nomor = "0" + nomor.slice(2);
+  }
 
-if(nomor.startsWith("62")){
-  nomor = "0" + nomor.slice(2);
-}
-
-if(!nomor.startsWith("08") || nomor.length < 10 || nomor.length > 13){
-  hasil.innerHTML="❌ Nomor tidak valid. Gunakan format 08xxxxxxxxxx";
-  return;
-}
+  if(!nomor.startsWith("08") || nomor.length < 10 || nomor.length > 13){
+    hasil.innerHTML="❌ Nomor tidak valid. Gunakan format 08xxxxxxxxxx";
+    return;
+  }
 
   hasil.innerHTML="⏳ Memproses pesanan...";
   btnBeli.disabled=true;
-btnBeli.innerText="⏳ Memproses...";
+  btnBeli.innerText="⏳ Memproses...";
 
   const response=await fetch("/beli",{
     method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
+    headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
       nomor,
       paket,
@@ -664,49 +540,31 @@ btnBeli.innerText="⏳ Memproses...";
 
   const data=await response.json();
   if(data.data?.saldo !== undefined){
-  localStorage.setItem("saldo", data.data.saldo);
-
-  document.getElementById("saldoUser").innerHTML =
-  "💰 Saldo: Rp" + Number(data.data.saldo).toLocaleString("id-ID");
-}
+    localStorage.setItem("saldo", data.data.saldo);
+    document.getElementById("saldoUser").innerHTML = "💰 Saldo: Rp" + Number(data.data.saldo).toLocaleString("id-ID");
+  }
 
   console.log("RESPON BACKEND:",data);
 
-  idtrxTerakhir =
-    data.data?.reffid ||
-    data.data?.data?.reffid ||
-    data.reffid ||
-    data.refid ||
-    "-";
-
-    localStorage.setItem("idtrxTerakhir", idtrxTerakhir);
+  idtrxTerakhir = data.data?.reffid || data.data?.data?.reffid || data.reffid || data.refid || "-";
+  localStorage.setItem("idtrxTerakhir", idtrxTerakhir);
 
   if(!data.sukses){
-  hasil.innerHTML=
-    "❌ "+data.pesan+
-    (idtrxTerakhir!="-" ? "<br>ID: "+idtrxTerakhir : "");
+    hasil.innerHTML="❌ "+data.pesan+(idtrxTerakhir!="-" ? "<br>ID: "+idtrxTerakhir : "");
+    btnBeli.disabled=false;
+    btnBeli.innerText="Beli Sekarang";
+    ambilRiwayat();
+    return;
+  }
 
+  hasil.innerHTML=data.pesan+"<br>ID: "+idtrxTerakhir+`<br><button class="btn-secondary" onclick="copyIdTransaksi()">📋 Copy ID Transaksi</button>`;
   btnBeli.disabled=false;
   btnBeli.innerText="Beli Sekarang";
-
   ambilRiwayat();
-  return;
-}
-
-  hasil.innerHTML=
-  data.pesan+
-  "<br>ID: "+idtrxTerakhir+
-  `<br><button class="btn-secondary" onclick="copyIdTransaksi()">📋 Copy ID Transaksi</button>`;
-
-btnBeli.disabled=false;
-btnBeli.innerText="Beli Sekarang";
-
-ambilRiwayat();
-autoCekStatusSetelahBeli();
+  autoCekStatusSetelahBeli();
 }
 
 async function cekStatus(){
-
   let hasil=document.getElementById("hasil");
   let btnCekStatus=document.getElementById("btnCekStatus");
 
@@ -720,50 +578,26 @@ async function cekStatus(){
   hasil.innerHTML+="<br>⏳ Mengecek status...";
 
   try{
-
     const response=await fetch("/cek/"+idtrxTerakhir);
     const data=await response.json();
 
     console.log("STATUS:",data);
 
     if(!data.data || data.data.length === 0){
-
-      hasil.innerHTML += `
-      <br><br>📦 Status Pesanan
-      <br>📊 Status: MASIH DIPROSES ⏳
-      `;
-
+      hasil.innerHTML += `<br><br>📦 Status Pesanan<br>📊 Status: MASIH DIPROSES ⏳`;
     } else {
-
       const trx = data.data[0];
-
-      hasil.innerHTML += `
-      <br><br>📦 Status Pesanan
-      <br>🆔 ID: ${trx.kode}
-      <br>📱 Tujuan: ${trx.tujuan}
-      <br>📦 Produk: ${trx.kode_produk}
-      <br>📊 Status: ${trx.status_text}
-      <br>📝 Keterangan: ${trx.keterangan || trx.sn || "-"}
-      `;
-
+      hasil.innerHTML += `<br><br>📦 Status Pesanan<br>🆔 ID: ${trx.kode}<br>📱 Tujuan: ${trx.tujuan}<br>📦 Produk: ${trx.kode_produk}<br>📊 Status: ${trx.status_text}<br>📝 Keterangan: ${trx.keterangan || trx.sn || "-"}`;
     }
-
   }catch(err){
-
-    hasil.innerHTML += `
-    <br>❌ Gagal cek status, coba lagi.
-    `;
-
+    hasil.innerHTML += `<br>❌ Gagal cek status, coba lagi.`;
   }finally{
-
     btnCekStatus.disabled=false;
     btnCekStatus.innerText="Cek Status";
-
   }
 }
 
 async function daftar(){
-
   let u=document.getElementById("user").value;
   let p=document.getElementById("pass").value;
 
@@ -774,13 +608,8 @@ async function daftar(){
 
   const response=await fetch("/daftar",{
     method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
-      username:u,
-      password:p
-    })
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username:u, password:p})
   });
 
   const data=await response.json();
@@ -788,7 +617,6 @@ async function daftar(){
 }
 
 async function login(){
-
   let u=document.getElementById("loginuser").value;
   let p=document.getElementById("loginpass").value;
 
@@ -799,29 +627,21 @@ async function login(){
 
   const response=await fetch("/login",{
     method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
-      username:u,
-      password:p
-    })
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({username:u, password:p})
   });
 
   const data=await response.json();
   console.log("DATA LOGIN:",data);
 
   if(data.sukses){
-
     sudahLogin=true;
-
     localStorage.setItem("login","true");
     localStorage.setItem("username",data.username);
     localStorage.setItem("saldo",data.saldo);
 
     document.getElementById("namaUser").textContent="👤 "+data.username;
-    document.getElementById("saldoUser").innerHTML=
-      "💰 Saldo: Rp"+Number(data.saldo).toLocaleString("id-ID");
+    document.getElementById("saldoUser").innerHTML="💰 Saldo: Rp"+Number(data.saldo).toLocaleString("id-ID");
 
     if(data.username=="yaditaoh"){
       document.getElementById("adminPanel").style.display="block";
@@ -830,13 +650,9 @@ async function login(){
     document.getElementById("loginbox").style.display="none";
     document.getElementById("menuUser").style.display="block";
     document.getElementById("beliBox").style.display="block";
-
     ambilRiwayat();
-
   }else{
-
     document.getElementById("loginhasil").innerHTML="❌ "+data.pesan;
-
   }
 }
 
@@ -851,188 +667,124 @@ function logout(){
 localStorage.removeItem("idtrxTerakhir");
 
 function topup(){
-
-const username = localStorage.getItem("username") || "-";
-
-const pesan =
-`Halo kak, saya mau deposit saldo Azazil Store.
-Username: ${username}
-Nominal: 
-Metode pembayaran: `;
-
-const url =
-"https://wa.me/62882010059319?text=" + encodeURIComponent(pesan);
-
-window.open(url, "_blank");
-
+  const username = localStorage.getItem("username") || "-";
+  const pesan = `Halo kak, saya mau deposit saldo Azazil Store.\nUsername: ${username}\nNominal: \nMetode pembayaran: `;
+  const url = "https://wa.me/62882010059319?text=" + encodeURIComponent(pesan);
+  window.open(url, "_blank");
 }
 
+// LOGIKA ADMIN YANG SUDAH DIPERBAIKI GURU
 async function tambahSaldo(){
-
   let user=document.getElementById("userTopup").value;
   let nominal=document.getElementById("nominalTopup").value;
+  let secretKey=document.getElementById("secretKeyTopup").value; // Ambil nilai Secret Key
 
-  if(!user || !nominal){
-    alert("Isi username & nominal 😭");
+  if(!user || !nominal || !secretKey){
+    alert("Isi username, nominal, & Secret Key Admin 😭");
     return;
   }
 
   const response=await fetch("/tambahsaldo",{
     method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
+    headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
       username:user.trim(),
-      nominal:nominal.trim()
+      nominal:nominal.trim(),
+      secret_key:secretKey.trim() // Kirim Secret Key ke server
     })
   });
 
   const data=await response.json();
-
   alert(data.pesan);
 
   if(data.sukses){
     document.getElementById("userTopup").value="";
     document.getElementById("nominalTopup").value="";
+    document.getElementById("secretKeyTopup").value=""; // Reset kolom
   }
 }
 
 async function ambilRiwayat(){
-
   const username=localStorage.getItem("username");
-
   const response=await fetch("/riwayat/"+username);
   let data = await response.json();
 
-  const pendingList = data.filter(item =>
-  item.status === "pending_dipotong" ||
-  item.status === "pending"
-);
+  const pendingList = data.filter(item => item.status === "pending_dipotong" || item.status === "pending");
 
-for(const trx of pendingList){
-  if(trx.reffid){
-    await fetch("/cek/" + trx.reffid);
+  for(const trx of pendingList){
+    if(trx.reffid){
+      await fetch("/cek/" + trx.reffid);
+    }
   }
-}
 
-if(pendingList.length > 0){
-  const responseBaru = await fetch("/riwayat/" + username);
-  data = await responseBaru.json();
-}
+  if(pendingList.length > 0){
+    const responseBaru = await fetch("/riwayat/" + username);
+    data = await responseBaru.json();
+  }
 
   let html="";
-
   if(data.length==0){
-
     html=`<div class="item-card">Belum ada transaksi 😭</div>`;
-
   }else{
-
     data.forEach(item=>{
+      const waktu = item.created_at ? new Date(item.created_at).toLocaleString("id-ID", {dateStyle: "medium", timeStyle: "short"}) : "-";
+      const statusText = String(item.status || "").toLowerCase();
+      let statusBadge = `<span class="status-badge status-pending">🟡 PENDING</span>`;
 
-      const waktu = item.created_at
-  ? new Date(item.created_at).toLocaleString("id-ID", {
-      dateStyle: "medium",
-      timeStyle: "short"
-    })
-  : "-";
+      if(statusText === "sukses"){ statusBadge = `<span class="status-badge status-sukses">🟢 SUKSES</span>`; }
+      if(statusText === "gagal"){ statusBadge = `<span class="status-badge status-gagal">🔴 GAGAL</span>`; }
+      if(statusText === "pending_dipotong"){ statusBadge = `<span class="status-badge status-pending">🟡 PENDING</span>`; }
 
-const statusText = String(item.status || "").toLowerCase();
-
-let statusBadge = `<span class="status-badge status-pending">🟡 PENDING</span>`;
-
-if(statusText === "sukses"){
-  statusBadge = `<span class="status-badge status-sukses">🟢 SUKSES</span>`;
-}
-
-if(statusText === "gagal"){
-  statusBadge = `<span class="status-badge status-gagal">🔴 GAGAL</span>`;
-}
-
-if(statusText === "pending_dipotong"){
-  statusBadge = `<span class="status-badge status-pending">🟡 PENDING</span>`;
-}
-
-html+=`
-<div class="item-card">
-  🆔 TrxID: <b>${item.trxid || "-"}</b><br>
-  🕒 ${waktu}<br>
-  🏷️ Kode: ${item.kode_produk || "-"}<br>
-  📱 Tujuan: ${item.nomor}<br>
-  💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
-  📊 Status: ${statusBadge}<br>
-  📝 Keterangan: ${bersihkanKeterangan(item.keterangan || item.sn || "-")}<br>
-  <small>RefID: ${item.reffid || "-"}</small><br>
-
-<button class="btn-secondary" onclick="hubungiAdminTransaksi(
-'${item.trxid || "-"}',
-'${item.reffid || "-"}',
-'${item.nomor || "-"}',
-'${item.paket || "-"}',
-'${item.status || "-"}'
-)">
-💬 Hubungi Admin
-</button>
-</div>
-`;
-
+      html+=`
+      <div class="item-card">
+        🆔 TrxID: <b>${item.trxid || "-"}</b><br>
+        🕒 ${waktu}<br>
+        🏷️ Kode: ${item.kode_produk || "-"}<br>
+        📱 Tujuan: ${item.nomor}<br>
+        💰 Rp${Number(item.harga).toLocaleString("id-ID")}<br>
+        📊 Status: ${statusBadge}<br>
+        📝 Keterangan: ${bersihkanKeterangan(item.keterangan || item.sn || "-")}<br>
+        <small>RefID: ${item.reffid || "-"}</small><br>
+      <button class="btn-secondary" onclick="hubungiAdminTransaksi('${item.trxid || "-"}','${item.reffid || "-"}','${item.nomor || "-"}','${item.paket || "-"}','${item.status || "-"}')">💬 Hubungi Admin</button>
+      </div>`;
     });
   }
-
   document.getElementById("riwayat").innerHTML=html;
 }
 
 async function cekStok(){
+  let stokhasil=document.getElementById("stokhasil");
+  if(stokhasil.innerHTML.trim() !== ""){
+    stokhasil.innerHTML="";
+    return;
+  }
 
-let stokhasil=document.getElementById("stokhasil");
+  stokhasil.innerHTML="⏳ Mengecek stok...";
+  const response=await fetch("/cekstok");
+  const data=await response.json();
 
-if(stokhasil.innerHTML.trim() !== ""){
-  stokhasil.innerHTML="";
-  return;
-}
+  if(!data.sukses){
+    stokhasil.innerHTML="❌ Gagal cek stok";
+    return;
+  }
 
-stokhasil.innerHTML="⏳ Mengecek stok...";
+  let html="";
+  data.data.data.forEach(item=>{
+    html+=`
+    <div class="item-card">
+      📦 <b>${item.nama}</b><br>
+      🏷️ ${item.type}<br>
+      ${item.sisa_slot > 0 ? "🟢 Tersedia: "+item.sisa_slot : "🔴 Stok Habis"}
+    </div>`;
+  });
 
-const response=await fetch("/cekstok");
-const data=await response.json();
-
-if(!data.sukses){
-  stokhasil.innerHTML="❌ Gagal cek stok";
-  return;
-}
-
-let html="";
-
-data.data.data.forEach(item=>{
-
-html+=`
-<div class="item-card">
-  📦 <b>${item.nama}</b><br>
-  🏷️ ${item.type}<br>
-  ${item.sisa_slot > 0
-    ? "🟢 Tersedia: "+item.sisa_slot
-    : "🔴 Stok Habis"}
-</div>
-`;
-
-});
-
-html += `
-<button class="btn-secondary" onclick="tutupStok()">
-Tutup Stok
-</button>
-`;
-
-stokhasil.innerHTML=html;
-
+  html += `<button class="btn-secondary" onclick="tutupStok()">Tutup Stok</button>`;
+  stokhasil.innerHTML=html;
 }
 
 function toggleRiwayat(){
-
   const riwayat=document.getElementById("riwayat");
   const panah=document.getElementById("panah");
-
   if(riwayat.style.display==="none" || riwayat.style.display===""){
     riwayat.style.display="block";
     panah.innerText="▼";
@@ -1043,289 +795,112 @@ function toggleRiwayat(){
 }
 
 function buatBubble(){
-
-const bubble=document.createElement("div");
-
-bubble.className="bubble";
-
-const size=Math.random()*60+20;
-
-bubble.style.width=size+"px";
-bubble.style.height=size+"px";
-
-bubble.style.left=Math.random()*100+"vw";
-
-bubble.style.animationDuration=
-(Math.random()*5+5)+"s";
-
-document.body.appendChild(bubble);
-
-setTimeout(()=>{
-bubble.remove();
-},10000);
-
+  const bubble=document.createElement("div");
+  bubble.className="bubble";
+  const size=Math.random()*60+20;
+  bubble.style.width=size+"px";
+  bubble.style.height=size+"px";
+  bubble.style.left=Math.random()*100+"vw";
+  bubble.style.animationDuration=(Math.random()*5+5)+"s";
+  document.body.appendChild(bubble);
+  setTimeout(()=>{bubble.remove();},10000);
 }
 
 setInterval(buatBubble,8000);
 
 async function refreshSaldo(){
+  const username = localStorage.getItem("username");
+  if(!username){
+    alert("Login dulu bro 😭");
+    return;
+  }
+  const response = await fetch("/saldo/" + encodeURIComponent(username));
+  const data = await response.json();
 
-const username = localStorage.getItem("username");
+  if(!data.sukses){
+    alert(data.pesan || "Gagal refresh saldo");
+    return;
+  }
 
-if(!username){
-alert("Login dulu bro 😭");
-return;
-}
-
-const response = await fetch("/saldo/" + encodeURIComponent(username));
-const data = await response.json();
-
-if(!data.sukses){
-alert(data.pesan || "Gagal refresh saldo");
-return;
-}
-
-localStorage.setItem("saldo", data.saldo);
-
-document.getElementById("saldoUser").innerHTML =
-"💰 Saldo: Rp" + Number(data.saldo).toLocaleString("id-ID");
-
-alert("Saldo berhasil direfresh 🔥");
-
+  localStorage.setItem("saldo", data.saldo);
+  document.getElementById("saldoUser").innerHTML = "💰 Saldo: Rp" + Number(data.saldo).toLocaleString("id-ID");
+  alert("Saldo berhasil direfresh 🔥");
 }
 
 function toggleLoginPass(){
-
-const input=document.getElementById("loginpass");
-
-if(input.type==="password"){
-  input.type="text";
-}else{
-  input.type="password";
-}
-
+  const input=document.getElementById("loginpass");
+  if(input.type==="password"){ input.type="text"; }else{ input.type="password"; }
 }
 
 function toggleDaftarPass(){
-
-const input=document.getElementById("pass");
-
-if(input.type==="password"){
-  input.type="text";
-}else{
-  input.type="password";
-}
-
+  const input=document.getElementById("pass");
+  if(input.type==="password"){ input.type="text"; }else{ input.type="password"; }
 }
 
 function bukaDaftar(){
-
-const box=document.getElementById("daftarBox");
-
-if(box.style.display==="none"){
-  box.style.display="block";
-}else{
-  box.style.display="none";
-}
-
-}
-
-function toggleDetail(id){
-
-const box=document.getElementById(id);
-
-if(box.style.display==="none" || box.style.display===""){
-  box.style.display="block";
-}else{
-  box.style.display="none";
-}
-
+  const box=document.getElementById("daftarBox");
+  if(box.style.display==="none"){ box.style.display="block"; }else{ box.style.display="none"; }
 }
 
 function tampilkanDetailPaket(){
+  const paket=document.getElementById("paket").value;
+  const box=document.getElementById("detailPaketBox");
 
-const paket=document.getElementById("paket").value;
-const box=document.getElementById("detailPaketBox");
+  const detail={
+    "SuperMini - Rp45.000":{ nama:"SuperMini", harga:"Rp45.000", area:["AREA 1 : 13 - 15 GB","AREA 2 : 15 - 17 GB","AREA 3 : 20 - 22 GB","AREA 4 : 30 - 32 GB"] },
+    "Mini - Rp58.000":{ nama:"Mini", harga:"Rp58.000", area:["AREA 1 : 31.75 - 33.75 GB","AREA 2 : 33.75 - 35.75 GB","AREA 3 : 38.75 - 40.75 GB","AREA 4 : 48.75 - 50.75 GB"] },
+    "Big - Rp62.000":{ nama:"Big", harga:"Rp62.000", area:["AREA 1 : 38 - 40 GB","AREA 2 : 40 - 42 GB","AREA 3 : 45 - 47 GB","AREA 4 : 55 - 57 GB"] },
+    "Jumbo V2 - Rp72.000":{ nama:"Jumbo V2", harga:"Rp72.000", area:["AREA 1 : 50.5 - 52.5 GB","AREA 2 : 52.5 - 54.5 GB","AREA 3 : 57.5 - 59.5 GB","AREA 4 : 67.5 - 69.5 GB"] },
+    "MegaBig - Rp97.000":{ nama:"MegaBig", harga:"Rp97.000", area:["AREA 1 : 88 - 90 GB","AREA 2 : 90 - 92 GB","AREA 3 : 95 - 97 GB","AREA 4 : 105 - 107 GB"] },
+    "Jumbo - Rp99.000":{ nama:"Jumbo", harga:"Rp99.000", area:["AREA 1 : 65 GB","AREA 2 : 70 GB","AREA 3 : 83 GB","AREA 4 : 123 GB"] }
+  };
 
-const detail={
-  "SuperMini - Rp45.000":{
-    nama:"SuperMini",
-    harga:"Rp45.000",
-    area:[
-      "AREA 1 : 13 - 15 GB",
-      "AREA 2 : 15 - 17 GB",
-      "AREA 3 : 20 - 22 GB",
-      "AREA 4 : 30 - 32 GB"
-    ]
-  },
+  const item=detail[paket];
+  if(!item){ box.innerHTML=""; return; }
 
-  "Mini - Rp58.000":{
-    nama:"Mini",
-    harga:"Rp58.000",
-    area:[
-      "AREA 1 : 31.75 - 33.75 GB",
-      "AREA 2 : 33.75 - 35.75 GB",
-      "AREA 3 : 38.75 - 40.75 GB",
-      "AREA 4 : 48.75 - 50.75 GB"
-    ]
-  },
-
-  "Big - Rp62.000":{
-    nama:"Big",
-    harga:"Rp62.000",
-    area:[
-      "AREA 1 : 38 - 40 GB",
-      "AREA 2 : 40 - 42 GB",
-      "AREA 3 : 45 - 47 GB",
-      "AREA 4 : 55 - 57 GB"
-    ]
-  },
-
-  "Jumbo V2 - Rp72.000":{
-    nama:"Jumbo V2",
-    harga:"Rp72.000",
-    area:[
-      "AREA 1 : 50.5 - 52.5 GB",
-      "AREA 2 : 52.5 - 54.5 GB",
-      "AREA 3 : 57.5 - 59.5 GB",
-      "AREA 4 : 67.5 - 69.5 GB"
-    ]
-  },
-
-  "MegaBig - Rp97.000":{
-    nama:"MegaBig",
-    harga:"Rp97.000",
-    area:[
-      "AREA 1 : 88 - 90 GB",
-      "AREA 2 : 90 - 92 GB",
-      "AREA 3 : 95 - 97 GB",
-      "AREA 4 : 105 - 107 GB"
-    ]
-  },
-
-  "Jumbo - Rp99.000":{
-    nama:"Jumbo",
-    harga:"Rp99.000",
-    area:[
-      "AREA 1 : 65 GB",
-      "AREA 2 : 70 GB",
-      "AREA 3 : 83 GB",
-      "AREA 4 : 123 GB"
-    ]
-  }
-};
-
-const item=detail[paket];
-
-if(!item){
-  box.innerHTML="";
-  return;
-}
-
-box.innerHTML=`
-  <h3>📦 ${item.nama}</h3>
-  <b>Detail Kuota:</b><br>
-  ${item.area.join("<br>")}
-  <br>
-  <span class="harga-detail">💰 ${item.harga}</span>
-`;
-
+  box.innerHTML=`<h3>📦 ${item.nama}</h3><b>Detail Kuota:</b><br>${item.area.join("<br>")}<br><span class="harga-detail">💰 ${item.harga}</span>`;
 }
 
 tampilkanDetailPaket();
 
 function copyIdTransaksi(){
-
-if(!idtrxTerakhir || idtrxTerakhir=="-"){
-  alert("Belum ada ID transaksi");
-  return;
-}
-
-navigator.clipboard.writeText(idtrxTerakhir);
-
-alert("ID transaksi berhasil dicopy 🔥");
-
+  if(!idtrxTerakhir || idtrxTerakhir=="-"){ alert("Belum ada ID transaksi"); return; }
+  navigator.clipboard.writeText(idtrxTerakhir);
+  alert("ID transaksi berhasil dicopy 🔥");
 }
 
 function bersihkanKeterangan(teks){
-
-if(!teks){
-  return "-";
+  if(!teks){ return "-"; }
+  teks = String(teks);
+  teks = teks.replace(/password=([^&\s]+)/gi, "password=***");
+  teks = teks.replace(/pin=([^&\s]+)/gi, "pin=***");
+  teks = teks.replace(/kodereseller=([^&\s]+)/gi, "kodereseller=***");
+  if(teks.includes("#")){ teks = teks.split("#").pop().trim(); }
+  if(teks.toLowerCase().includes("trx?")){ return "Transaksi gagal / provider gangguan"; }
+  return teks;
 }
 
-teks = String(teks);
-
-// sensor data sensitif
-teks = teks.replace(/password=([^&\s]+)/gi, "password=***");
-teks = teks.replace(/pin=([^&\s]+)/gi, "pin=***");
-teks = teks.replace(/kodereseller=([^&\s]+)/gi, "kodereseller=***");
-
-// kalau ada format URL mentah trx?... ambil bagian setelah # saja
-if(teks.includes("#")){
-  teks = teks.split("#").pop().trim();
-}
-
-// kalau masih ada kata trx? buang total
-if(teks.toLowerCase().includes("trx?")){
-  return "Transaksi gagal / provider gangguan";
-}
-
-return teks;
-
-}
-
-function tutupStok(){
-  document.getElementById("stokhasil").innerHTML="";
-}
+function tutupStok(){ document.getElementById("stokhasil").innerHTML=""; }
 
 function hubungiAdminTransaksi(trxid, reffid, nomor, paket, status){
-
-const username = localStorage.getItem("username") || "-";
-
-const pesan =
-`Halo kak, saya mau tanya transaksi Azazil Store.
-
-Username: ${username}
-TrxID: ${trxid}
-RefID: ${reffid}
-Nomor: ${nomor}
-Paket: ${paket}
-Status: ${status}`;
-
-const url =
-"https://wa.me/62882010059319?text=" + encodeURIComponent(pesan);
-
-window.open(url, "_blank");
-
+  const username = localStorage.getItem("username") || "-";
+  const pesan = `Halo kak, saya mau tanya transaksi Azazil Store.\n\nUsername: ${username}\nTrxID: ${trxid}\nRefID: ${reffid}\nNomor: ${nomor}\nPaket: ${paket}\nStatus: ${status}`;
+  const url = "https://wa.me/62882010059319?text=" + encodeURIComponent(pesan);
+  window.open(url, "_blank");
 }
 
-function cekAreaXL(){
-  window.open("https://xl.kavion.eu.cc/", "_blank");
-}
+function cekAreaXL(){ window.open("https://xl.kavion.eu.cc/", "_blank"); }
 
 function autoCekStatusSetelahBeli(){
-
-let jumlahCek = 0;
-
-const interval = setInterval(async()=>{
-
-  jumlahCek++;
-
-  if(!idtrxTerakhir || idtrxTerakhir === "-"){
-    clearInterval(interval);
-    return;
-  }
-
-  await cekStatus();
-  await ambilRiwayat();
-  await refreshSaldo();
-
-  if(jumlahCek >= 6){
-    clearInterval(interval);
-  }
-
-}, 10000);
-
+  let jumlahCek = 0;
+  const interval = setInterval(async()=>{
+    jumlahCek++;
+    if(!idtrxTerakhir || idtrxTerakhir === "-"){ clearInterval(interval); return; }
+    await cekStatus();
+    await ambilRiwayat();
+    await refreshSaldo();
+    if(jumlahCek >= 6){ clearInterval(interval); }
+  }, 10000);
 }
 </script>
 </body>
